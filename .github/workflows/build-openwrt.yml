@@ -190,16 +190,16 @@ jobs:
           path: |
             /workdir/openwrt/dl
             /workdir/openwrt/tmp/
-            /workdir/openwrt/bin/
+            # /workdir/openwrt/bin/
             /workdir/openwrt/build_dir/host
-            /workdir/openwrt/staging_dir/
+            # /workdir/openwrt/staging_dir/
             /workdir/openwrt/feeds/
-            /workdir/openwrt/build_dir/hostpkg
+            # /workdir/openwrt/build_dir/hostpkg
           key: openwrt
 
       - name: Compress directory
         run: |
-          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds/ /workdir/openwrt/build_dir/hostpkg
+          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds
           bsdtar -czlf staging_dir.tar.gz /workdir/openwrt/staging_dir && sudo rm -rf /workdir/openwrt/staging_dir
           bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
           bsdtar -czlf hostpkg.tar.gz /workdir/openwrt/build_dir/hostpkg && sudo rm -rf /workdir/openwrt/build_dir/hostpkg
@@ -274,7 +274,7 @@ jobs:
           bsdtar -xzf openwrt.tar.gz -C /workdir/openwrt --strip-components=2 && rm openwrt.tar.gz
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt开始编译第二部分"
-          rm -rf openwrt/build_dir/hostpkg openwrt/staging_dir openwrt/dl
+          rm -rf openwrt/staging_dir openwrt/dl
           curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始编译第二部分
        
       - name: Free up disk space
@@ -309,13 +309,13 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-             /workdir/openwrt/dl
-             /workdir/openwrt/tmp/
-             /workdir/openwrt/bin/
-             /workdir/openwrt/build_dir/host
-             /workdir/openwrt/staging_dir/
-             /workdir/openwrt/feeds/
-             /workdir/openwrt/build_dir/hostpkg
+            /workdir/openwrt/dl
+            /workdir/openwrt/tmp/
+            # /workdir/openwrt/bin/
+            /workdir/openwrt/build_dir/host
+            # /workdir/openwrt/staging_dir/
+            /workdir/openwrt/feeds/
+            # /workdir/openwrt/build_dir/hostpkg
           key: openwrt
           restore-keys: |
                openwrt
@@ -368,18 +368,18 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: |
-             /workdir/openwrt/dl
-             /workdir/openwrt/tmp/
-             /workdir/openwrt/bin/
-             /workdir/openwrt/build_dir/host
-             /mnt/openwrt/staging_dir/
-             /workdir/openwrt/feeds/
-             /workdir/openwrt/build_dir/hostpkg
+            /workdir/openwrt/dl
+            /workdir/openwrt/tmp/
+            # /workdir/openwrt/bin/
+            /workdir/openwrt/build_dir/host
+            # /workdir/openwrt/staging_dir/
+            /workdir/openwrt/feeds/
+            # /workdir/openwrt/build_dir/hostpkg
           key: openwrt
       
       - name: Compress directory
         run: |
-          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds/ /workdir/openwrt/build_dir/hostpkg
+          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds
           bsdtar -czlf staging_dir.tar.gz /workdir/openwrt/staging_dir && sudo rm -rf /workdir/openwrt/staging_dir
           bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
           bsdtar -czlf hostpkg.tar.gz /workdir/openwrt/build_dir/hostpkg && sudo rm -rf /workdir/openwrt/build_dir/hostpkg
@@ -454,7 +454,7 @@ jobs:
           bsdtar -xzf openwrt.tar.gz -C /workdir/openwrt --strip-components=2 && rm openwrt.tar.gz
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt开始编译第三部分"
-          rm -rf openwrt/build_dir/hostpkg openwrt/staging_dir openwrt/dl
+          rm -rf openwrt/staging_dir openwrt/dl
           curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始编译第三部分
        
       - name: Free up disk space
@@ -489,13 +489,13 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-             /workdir/openwrt/dl
-             /workdir/openwrt/tmp/
-             /workdir/openwrt/bin/
-             /workdir/openwrt/build_dir/host
-             /workdir/openwrt/staging_dir/
-             /workdir/openwrt/feeds/
-             /workdir/openwrt/build_dir/hostpkg
+            /workdir/openwrt/dl
+            /workdir/openwrt/tmp/
+            # /workdir/openwrt/bin/
+            /workdir/openwrt/build_dir/host
+            # /workdir/openwrt/staging_dir/
+            /workdir/openwrt/feeds/
+            # /workdir/openwrt/build_dir/hostpkg
           key: openwrt
           restore-keys: |
                openwrt
@@ -548,18 +548,18 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: |
-             /workdir/openwrt/dl
-             /workdir/openwrt/tmp/
-             /workdir/openwrt/bin/
-             /workdir/openwrt/staging_dir/
-             /workdir/openwrt/build_dir/host
-             /workdir/openwrt/feeds/
-             /workdir/openwrt/build_dir/hostpkg
+            /workdir/openwrt/dl
+            /workdir/openwrt/tmp/
+            # /workdir/openwrt/bin/
+            /workdir/openwrt/build_dir/host
+            # /workdir/openwrt/staging_dir/
+            /workdir/openwrt/feeds/
+            # /workdir/openwrt/build_dir/hostpkg
           key: openwrt
-          
+        
       - name: Compress directory
         run: |
-          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds/ /workdir/openwrt/build_dir/hostpkg
+          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds
           bsdtar -czlf staging_dir.tar.gz /workdir/openwrt/staging_dir && sudo rm -rf /workdir/openwrt/staging_dir
           bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
           bsdtar -czlf hostpkg.tar.gz /workdir/openwrt/build_dir/hostpkg && sudo rm -rf /workdir/openwrt/build_dir/hostpkg
@@ -634,7 +634,7 @@ jobs:
           bsdtar -xzf openwrt.tar.gz -C /workdir/openwrt --strip-components=2 && rm openwrt.tar.gz
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt开始最终编译"
-          rm -rf openwrt/build_dir/hostpkg openwrt/staging_dir openwrt/dl
+          rm -rf openwrt/staging_dir openwrt/dl
           curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始最终编译
        
       - name: Free up disk space
@@ -669,13 +669,13 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-             /workdir/openwrt/dl
-             /workdir/openwrt/tmp/
-             /workdir/openwrt/bin/
-             /workdir/openwrt/build_dir/host
-             /workdir/openwrt/staging_dir/
-             /workdir/openwrt/feeds/
-             /workdir/openwrt/build_dir/hostpkg
+            /workdir/openwrt/dl
+            /workdir/openwrt/tmp/
+            # /workdir/openwrt/bin/
+            /workdir/openwrt/build_dir/host
+            # /workdir/openwrt/staging_dir/
+            /workdir/openwrt/feeds/
+            # /workdir/openwrt/build_dir/hostpkg
           key: openwrt
           restore-keys: |
                openwrt

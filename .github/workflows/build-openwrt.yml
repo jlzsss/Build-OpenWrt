@@ -291,7 +291,8 @@ jobs:
           ln -sf /mnt/openwrt/bin /workdir/openwrt/bin
           ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
-
+          df -hT
+          
       - name: Multi-thread compile
         id: Multi-thread
         run: |
@@ -429,7 +430,8 @@ jobs:
           ln -sf /mnt/openwrt/bin /workdir/openwrt/bin
           ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
-
+          df -hT
+          
       - name: Multi-thread compile
         id: Multi-thread
         run: |
@@ -567,7 +569,8 @@ jobs:
           ln -sf /mnt/openwrt/bin /workdir/openwrt/bin
           ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
-
+          df -hT
+          
       - name: Multi-thread compile
         id: Multi-thread
         run: |

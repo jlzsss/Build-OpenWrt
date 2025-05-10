@@ -43,7 +43,7 @@ jobs:
       - name: WeChat notification
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=开始编译OpenWrt"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=开始编译OpenWrt
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=开始编译OpenWrt
           
       - name: Initialize environment
         env:
@@ -98,14 +98,11 @@ jobs:
           sudo swapoff /mnt/swapfile
           sudo rm -rf /mnt/swapfile
           sudo chmod 777 /mnt
-          sudo mkdir -p -m 777 /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/build_dir/host openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
+          sudo mkdir -p -m 777 openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
           ln -sf /mnt/openwrt/dl openwrt/dl
           ln -sf /mnt/openwrt/tmp openwrt/tmp        
           ln -sf /mnt/openwrt/bin openwrt/bin
-          # ln -sf /mnt/openwrt/build_dir/host openwrt/build_dir/host 
           ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
-          # ln -sf /mnt/openwrt/build_dir/hostpkg openwrt/build_dir/hostpkg
-          # ln -sf /mnt/openwrt/feeds openwrt/feeds
           ln -sf /mnt/openwrt/build_dir openwrt/build_dir
           df -hT
              
@@ -137,7 +134,6 @@ jobs:
           chmod +x $DIY_P3_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P3_SH
-          # mv ${GITHUB_WORKSPACE}/patches/patches ${GITHUB_WORKSPACE}/openwrt/feeds/kenzok8/fullconenat-nft
           find "${GITHUB_WORKSPACE}/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d '${GITHUB_WORKSPACE}/openwrt' -p1 --forward"
         
       - name: SSH connection to Actions
@@ -184,29 +180,15 @@ jobs:
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
        
-      - name: Save cache
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            /workdir/openwrt/dl
-            /workdir/openwrt/tmp/
-            # /workdir/openwrt/bin/
-            /workdir/openwrt/build_dir/host
-            # /workdir/openwrt/staging_dir/
-            /workdir/openwrt/feeds/
-            # /workdir/openwrt/build_dir/hostpkg
-          key: openwrt
-
       - name: Compress directory
         run: |
-          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds
-          bsdtar -czlf staging_dir.tar.gz /workdir/openwrt/staging_dir && sudo rm -rf /workdir/openwrt/staging_dir
-          bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
-          bsdtar -czlf hostpkg.tar.gz /workdir/openwrt/build_dir/hostpkg && sudo rm -rf /workdir/openwrt/build_dir/hostpkg
-          bsdtar -czlf host.tar.gz /mnt/openwrt/build_dir/host && sudo rm -rf /mnt/openwrt/build_dir/host
+		      sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/bin /workdir/openwrt/tmp /workdir/openwrt/build_dir /workdir/openwrt/staging_dir
+          bsdtar -czlf staging_dir.tar.gz /mnt/openwrt/staging_dir && sudo rm -rf /mnt/openwrt/staging_dir
+          bsdtar -czlf build_dir.tar.gz /mnt/openwrt/build_dir && sudo rm -rf /mnt/openwrt/build_dir
           bsdtar -czlf bin.tar.gz /mnt/openwrt/bin && sudo rm -rf /mnt/openwrt/bin
+		      bsdtar -czlf tmp.tar.gz /mnt/openwrt/tmp && sudo rm -rf /mnt/openwrt/tmp
           bsdtar -czlf dl.tar.gz /mnt/openwrt/dl && sudo rm -rf /mnt/openwrt/dl
-          bsdtar -czlf feeds.tar.gz /mnt/openwrt/feeds && sudo rm -rf /mnt/openwrt/feeds
+          bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
           df -hT
       
       - name: Store build artifacts
@@ -214,25 +196,24 @@ jobs:
         with:
           name: build-output
           path: |
-            openwrt.tar.gz
             staging_dir.tar.gz
-            hostpkg.tar.gz
-            host.tar.gz
+            build_dir.tar.gz
             bin.tar.gz
             dl.tar.gz
-            feeds.tar.gz
-          
+            tmp.tar.gz
+            openwrt.tar.gz
+			
       - name: WeChat notification
         if: steps.Multi-thread.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success' && !cancelled() && job.status == 'success'
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt第一部分编译成功"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第一部分编译成功
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第一部分编译成功
        
       - name: WeChat notification
         if: failure() && !cancelled()
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt第一部分编译失败"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第一部分编译失败
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第一部分编译失败
       
   build1:
     needs: prepare
@@ -274,8 +255,7 @@ jobs:
           bsdtar -xzf openwrt.tar.gz -C /workdir/openwrt --strip-components=2 && rm openwrt.tar.gz
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt开始编译第二部分"
-          rm -rf openwrt/staging_dir openwrt/dl
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始编译第二部分
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始编译第二部分
        
       - name: Free up disk space
         if: env.FREE_UP_DISK == 'true'
@@ -285,52 +265,35 @@ jobs:
           sudo swapoff /mnt/swapfile
           sudo rm -rf /mnt/swapfile
           sudo chmod 777 /mnt
-          sudo mkdir -p -m 777 /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/build_dir/host openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
+          sudo mkdir -p -m 777 openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
           ln -sf /mnt/openwrt/dl openwrt/dl
           ln -sf /mnt/openwrt/tmp openwrt/tmp        
           ln -sf /mnt/openwrt/bin openwrt/bin
-          # ln -sf /mnt/openwrt/build_dir/host openwrt/build_dir/host 
           ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
-          # ln -sf /mnt/openwrt/build_dir/hostpkg openwrt/build_dir/hostpkg
-          # ln -sf /mnt/openwrt/feeds openwrt/feeds
           ln -sf /mnt/openwrt/build_dir openwrt/build_dir
           df -hT
               
       - name: Unzip artifact
         run: |
-          cd /workdir && mkdir -p openwrt/staging_dir && bsdtar -xzf staging_dir.tar.gz -C /workdir/openwrt/staging_dir --strip-components=3 && rm staging_dir.tar.gz       
-          cd /workdir && bsdtar -xzf host.tar.gz -C /mnt/openwrt/build_dir/host --strip-components=4 && rm host.tar.gz
+          cd /workdir && bsdtar -xzf build_dir.tar.gz -C /mnt/openwrt/build_dir --strip-components=4 && rm build_dir.tar.gz
           cd /workdir && bsdtar -xzf bin.tar.gz -C /mnt/openwrt/bin --strip-components=3 && rm bin.tar.gz
           cd /workdir && bsdtar -xzf dl.tar.gz -C /mnt/openwrt/dl --strip-components=3 && rm dl.tar.gz
           cd /workdir && bsdtar -xzf staging_dir.tar.gz -C /mnt/openwrt/staging_dir --strip-components=3 && rm staging_dir.tar.gz
-          cd /workdir && bsdtar -xzf feeds.tar.gz -C /mnt/openwrt/feeds --strip-components=3 && rm feeds.tar.gz
-      
-      - name: Restore cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            /workdir/openwrt/dl
-            /workdir/openwrt/tmp/
-            # /workdir/openwrt/bin/
-            /workdir/openwrt/build_dir/host
-            # /workdir/openwrt/staging_dir/
-            /workdir/openwrt/feeds/
-            # /workdir/openwrt/build_dir/hostpkg
-          key: openwrt
-          restore-keys: |
-               openwrt
-               
+          cd /workdir && bsdtar -xzf tmp.tar.gz -C /mnt/openwrt/tmp --strip-components=3 && rm tmp.tar.gz
+                   
       - name: Move files
         run: |
           mv /workdir/openwrt/dl /mnt/openwrt/dl
           mv /workdir/openwrt/tmp /mnt/openwrt/tmp
           mv /workdir/openwrt/bin /mnt/openwrt/bin
-          mv /workdir/openwrt/build_dir/host /mnt/openwrt/build_dir/host
+          mv /workdir/openwrt/build_dir /mnt/openwrt/build_dir
+		      mv /workdir/openwrt/staging_dir /mnt/openwrt/staging_dir
           ln -sf /mnt/openwrt/dl /workdir/openwrt/dl
           ln -sf /mnt/openwrt/tmp /workdir/openwrt/tmp        
           ln -sf /mnt/openwrt/bin /workdir/openwrt/bin
-          ln -sf /mnt/openwrt/build_dir/host /workdir/openwrt/build_dir/host           
-          
+          ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir          
+          ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
+		  
       - name: Multi-thread compile
         id: Multi-thread
         run: |
@@ -355,38 +318,15 @@ jobs:
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
          
-      - name: Move files
-        run: |
-          rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp /workdir/openwrt/bin /workdir/openwrt/build_dir/host
-          mkdir -p -m 777 /workdir/openwrt/dl /workdir/openwrt/tmp /workdir/openwrt/bin /workdir/openwrt/build_dir/host
-          cp -aprf /mnt/openwrt/dl /workdir/openwrt/dl
-          cp -aprf /mnt/openwrt/tmp /workdir/openwrt/tmp
-          cp -aprf /mnt/openwrt/bin /workdir/openwrt/bin
-          cp -aprf /mnt/openwrt/build_dir/host /workdir/openwrt/build_dir/host
-          
-      - name: Save cache
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            /workdir/openwrt/dl
-            /workdir/openwrt/tmp/
-            # /workdir/openwrt/bin/
-            /workdir/openwrt/build_dir/host
-            # /workdir/openwrt/staging_dir/
-            /workdir/openwrt/feeds/
-            # /workdir/openwrt/build_dir/hostpkg
-          key: openwrt
-      
       - name: Compress directory
         run: |
-          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds
-          bsdtar -czlf staging_dir.tar.gz /workdir/openwrt/staging_dir && sudo rm -rf /workdir/openwrt/staging_dir
-          bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
-          bsdtar -czlf hostpkg.tar.gz /workdir/openwrt/build_dir/hostpkg && sudo rm -rf /workdir/openwrt/build_dir/hostpkg
-          bsdtar -czlf host.tar.gz /mnt/openwrt/build_dir/host && sudo rm -rf /mnt/openwrt/build_dir/host
+		      sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/bin /workdir/openwrt/tmp /workdir/openwrt/build_dir /workdir/openwrt/staging_dir
+          bsdtar -czlf staging_dir.tar.gz /mnt/openwrt/staging_dir && sudo rm -rf /mnt/openwrt/staging_dir
+          bsdtar -czlf build_dir.tar.gz /mnt/openwrt/build_dir && sudo rm -rf /mnt/openwrt/build_dir
           bsdtar -czlf bin.tar.gz /mnt/openwrt/bin && sudo rm -rf /mnt/openwrt/bin
+		      bsdtar -czlf tmp.tar.gz /mnt/openwrt/tmp && sudo rm -rf /mnt/openwrt/tmp
           bsdtar -czlf dl.tar.gz /mnt/openwrt/dl && sudo rm -rf /mnt/openwrt/dl
-          bsdtar -czlf feeds.tar.gz /mnt/openwrt/feeds && sudo rm -rf /mnt/openwrt/feeds
+          bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
           df -hT
       
       - name: Store build artifacts
@@ -394,25 +334,24 @@ jobs:
         with:
           name: build-output
           path: |
-            openwrt.tar.gz
             staging_dir.tar.gz
-            hostpkg.tar.gz
-            host.tar.gz
+            build_dir.tar.gz
             bin.tar.gz
             dl.tar.gz
-            feeds.tar.gz
+            tmp.tar.gz
+            openwrt.tar.gz
        
       - name: WeChat notification
         if: steps.Multi-thread.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success' && !cancelled() && job.status == 'success'
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt第二部分编译成功"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第二部分编译成功
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第二部分编译成功
        
       - name: WeChat notification
         if: failure() && !cancelled()
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt第二部分编译失败"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第二部分编译失败  
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第二部分编译失败  
          
   build2:
     needs: build1
@@ -454,8 +393,7 @@ jobs:
           bsdtar -xzf openwrt.tar.gz -C /workdir/openwrt --strip-components=2 && rm openwrt.tar.gz
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt开始编译第三部分"
-          rm -rf openwrt/staging_dir openwrt/dl
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始编译第三部分
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始编译第三部分
        
       - name: Free up disk space
         if: env.FREE_UP_DISK == 'true'
@@ -465,51 +403,34 @@ jobs:
           sudo swapoff /mnt/swapfile
           sudo rm -rf /mnt/swapfile
           sudo chmod 777 /mnt
-          sudo mkdir -p -m 777 /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/build_dir/host openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
+          sudo mkdir -p -m 777 openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
           ln -sf /mnt/openwrt/dl openwrt/dl
           ln -sf /mnt/openwrt/tmp openwrt/tmp        
           ln -sf /mnt/openwrt/bin openwrt/bin
-          # ln -sf /mnt/openwrt/build_dir/host openwrt/build_dir/host 
           ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
-          # ln -sf /mnt/openwrt/build_dir/hostpkg openwrt/build_dir/hostpkg
-          # ln -sf /mnt/openwrt/feeds openwrt/feeds
           ln -sf /mnt/openwrt/build_dir openwrt/build_dir
           df -hT
               
       - name: Unzip artifact
         run: |
-          cd /workdir && mkdir -p openwrt/staging_dir && bsdtar -xzf staging_dir.tar.gz -C /workdir/openwrt/staging_dir --strip-components=3 && rm staging_dir.tar.gz 
-          cd /workdir && bsdtar -xzf host.tar.gz -C /mnt/openwrt/build_dir/host --strip-components=4 && rm host.tar.gz
+          cd /workdir && bsdtar -xzf build_dir.tar.gz -C /mnt/openwrt/build_dir --strip-components=4 && rm build_dir.tar.gz
           cd /workdir && bsdtar -xzf bin.tar.gz -C /mnt/openwrt/bin --strip-components=3 && rm bin.tar.gz
           cd /workdir && bsdtar -xzf dl.tar.gz -C /mnt/openwrt/dl --strip-components=3 && rm dl.tar.gz
           cd /workdir && bsdtar -xzf staging_dir.tar.gz -C /mnt/openwrt/staging_dir --strip-components=3 && rm staging_dir.tar.gz
-          cd /workdir && bsdtar -xzf feeds.tar.gz -C /mnt/openwrt/feeds --strip-components=3 && rm feeds.tar.gz
-          
-      - name: Restore cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            /workdir/openwrt/dl
-            /workdir/openwrt/tmp/
-            # /workdir/openwrt/bin/
-            /workdir/openwrt/build_dir/host
-            # /workdir/openwrt/staging_dir/
-            /workdir/openwrt/feeds/
-            # /workdir/openwrt/build_dir/hostpkg
-          key: openwrt
-          restore-keys: |
-               openwrt
-          
+          cd /workdir && bsdtar -xzf tmp.tar.gz -C /mnt/openwrt/tmp --strip-components=3 && rm tmp.tar.gz
+                   
       - name: Move files
         run: |
           mv /workdir/openwrt/dl /mnt/openwrt/dl
           mv /workdir/openwrt/tmp /mnt/openwrt/tmp
           mv /workdir/openwrt/bin /mnt/openwrt/bin
-          mv /workdir/openwrt/build_dir/host /mnt/openwrt/build_dir/host
+          mv /workdir/openwrt/build_dir /mnt/openwrt/build_dir
+		      mv /workdir/openwrt/staging_dir /mnt/openwrt/staging_dir
           ln -sf /mnt/openwrt/dl /workdir/openwrt/dl
           ln -sf /mnt/openwrt/tmp /workdir/openwrt/tmp        
           ln -sf /mnt/openwrt/bin /workdir/openwrt/bin
-          ln -sf /mnt/openwrt/build_dir/host /workdir/openwrt/build_dir/host 
+          ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir          
+          ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
           
       - name: Multi-thread compile
         id: Multi-thread
@@ -535,38 +456,15 @@ jobs:
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
          
-      - name: Move files
-        run: |
-          rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp /workdir/openwrt/bin /workdir/openwrt/build_dir/host
-          mkdir -p -m 777 /workdir/openwrt/dl /workdir/openwrt/tmp /workdir/openwrt/bin /workdir/openwrt/build_dir/host
-          cp -aprf /mnt/openwrt/dl /workdir/openwrt/dl
-          cp -aprf /mnt/openwrt/tmp /workdir/openwrt/tmp
-          cp -aprf /mnt/openwrt/bin /workdir/openwrt/bin
-          cp -aprf /mnt/openwrt/build_dir/host /workdir/openwrt/build_dir/host
-          
-      - name: Save cache
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            /workdir/openwrt/dl
-            /workdir/openwrt/tmp/
-            # /workdir/openwrt/bin/
-            /workdir/openwrt/build_dir/host
-            # /workdir/openwrt/staging_dir/
-            /workdir/openwrt/feeds/
-            # /workdir/openwrt/build_dir/hostpkg
-          key: openwrt
-        
       - name: Compress directory
         run: |
-          sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/tmp/ /workdir/openwrt/bin/ /workdir/openwrt/build_dir/host /workdir/openwrt/feeds
-          bsdtar -czlf staging_dir.tar.gz /workdir/openwrt/staging_dir && sudo rm -rf /workdir/openwrt/staging_dir
-          bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
-          bsdtar -czlf hostpkg.tar.gz /workdir/openwrt/build_dir/hostpkg && sudo rm -rf /workdir/openwrt/build_dir/hostpkg
-          bsdtar -czlf host.tar.gz /mnt/openwrt/build_dir/host && sudo rm -rf /mnt/openwrt/build_dir/host
+		      sudo rm -rf /workdir/openwrt/dl /workdir/openwrt/bin /workdir/openwrt/tmp /workdir/openwrt/build_dir /workdir/openwrt/staging_dir
+          bsdtar -czlf staging_dir.tar.gz /mnt/openwrt/staging_dir && sudo rm -rf /mnt/openwrt/staging_dir
+          bsdtar -czlf build_dir.tar.gz /mnt/openwrt/build_dir && sudo rm -rf /mnt/openwrt/build_dir
           bsdtar -czlf bin.tar.gz /mnt/openwrt/bin && sudo rm -rf /mnt/openwrt/bin
+		      bsdtar -czlf tmp.tar.gz /mnt/openwrt/tmp && sudo rm -rf /mnt/openwrt/tmp
           bsdtar -czlf dl.tar.gz /mnt/openwrt/dl && sudo rm -rf /mnt/openwrt/dl
-          bsdtar -czlf feeds.tar.gz /mnt/openwrt/feeds && sudo rm -rf /mnt/openwrt/feeds
+          bsdtar -czlf openwrt.tar.gz /workdir/openwrt && sudo rm -rf /workdir/openwrt
           df -hT
       
       - name: Store build artifacts
@@ -574,25 +472,24 @@ jobs:
         with:
           name: build-output
           path: |
-            openwrt.tar.gz
             staging_dir.tar.gz
-            hostpkg.tar.gz
-            host.tar.gz
+            build_dir.tar.gz
             bin.tar.gz
             dl.tar.gz
-            feeds.tar.gz
-   
+            tmp.tar.gz
+            openwrt.tar.gz
+  
       - name: WeChat notification
         if: steps.Multi-thread.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success' && !cancelled() && job.status == 'success'
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt第三部分编译成功"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第三部分编译成功
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第三部分编译成功
        
       - name: WeChat notification
         if: failure() && !cancelled()
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt第三部分编译失败"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第三部分编译失败  
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt第三部分编译失败  
          
   uploads:
     needs: build2
@@ -634,8 +531,7 @@ jobs:
           bsdtar -xzf openwrt.tar.gz -C /workdir/openwrt --strip-components=2 && rm openwrt.tar.gz
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt开始最终编译"
-          rm -rf openwrt/staging_dir openwrt/dl
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始最终编译
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt开始最终编译
        
       - name: Free up disk space
         if: env.FREE_UP_DISK == 'true'
@@ -645,51 +541,34 @@ jobs:
           sudo swapoff /mnt/swapfile
           sudo rm -rf /mnt/swapfile
           sudo chmod 777 /mnt
-          sudo mkdir -p -m 777 /mnt/openwrt/build_dir/hostpkg /mnt/openwrt/build_dir/host openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
+          sudo mkdir -p -m 777 openwrt/build_dir /mnt/openwrt/dl /mnt/openwrt/staging_dir /mnt/openwrt/build_dir /mnt/openwrt/tmp /mnt/openwrt/bin
           ln -sf /mnt/openwrt/dl openwrt/dl
           ln -sf /mnt/openwrt/tmp openwrt/tmp        
           ln -sf /mnt/openwrt/bin openwrt/bin
-          # ln -sf /mnt/openwrt/build_dir/host openwrt/build_dir/host 
           ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
-          # ln -sf /mnt/openwrt/build_dir/hostpkg openwrt/build_dir/hostpkg
-          # ln -sf /mnt/openwrt/feeds openwrt/feeds
           ln -sf /mnt/openwrt/build_dir openwrt/build_dir
           df -hT
-               
+              
       - name: Unzip artifact
         run: |
-          cd /workdir && mkdir -p openwrt/staging_dir && bsdtar -xzf staging_dir.tar.gz -C /workdir/openwrt/staging_dir --strip-components=3 && rm staging_dir.tar.gz
-          cd /workdir && bsdtar -xzf host.tar.gz -C /mnt/openwrt/build_dir/host --strip-components=4 && rm host.tar.gz
+          cd /workdir && bsdtar -xzf build_dir.tar.gz -C /mnt/openwrt/build_dir --strip-components=4 && rm build_dir.tar.gz
           cd /workdir && bsdtar -xzf bin.tar.gz -C /mnt/openwrt/bin --strip-components=3 && rm bin.tar.gz
           cd /workdir && bsdtar -xzf dl.tar.gz -C /mnt/openwrt/dl --strip-components=3 && rm dl.tar.gz
           cd /workdir && bsdtar -xzf staging_dir.tar.gz -C /mnt/openwrt/staging_dir --strip-components=3 && rm staging_dir.tar.gz
-          cd /workdir && bsdtar -xzf feeds.tar.gz -C /mnt/openwrt/feeds --strip-components=3 && rm feeds.tar.gz
-          
-      - name: Restore cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            /workdir/openwrt/dl
-            /workdir/openwrt/tmp/
-            # /workdir/openwrt/bin/
-            /workdir/openwrt/build_dir/host
-            # /workdir/openwrt/staging_dir/
-            /workdir/openwrt/feeds/
-            # /workdir/openwrt/build_dir/hostpkg
-          key: openwrt
-          restore-keys: |
-               openwrt
-               
+          cd /workdir && bsdtar -xzf tmp.tar.gz -C /mnt/openwrt/tmp --strip-components=3 && rm tmp.tar.gz
+                   
       - name: Move files
         run: |
           mv /workdir/openwrt/dl /mnt/openwrt/dl
           mv /workdir/openwrt/tmp /mnt/openwrt/tmp
           mv /workdir/openwrt/bin /mnt/openwrt/bin
-          mv /workdir/openwrt/build_dir/host /mnt/openwrt/build_dir/host
+          mv /workdir/openwrt/build_dir /mnt/openwrt/build_dir
+		      mv /workdir/openwrt/staging_dir /mnt/openwrt/staging_dir
           ln -sf /mnt/openwrt/dl /workdir/openwrt/dl
           ln -sf /mnt/openwrt/tmp /workdir/openwrt/tmp        
           ln -sf /mnt/openwrt/bin /workdir/openwrt/bin
-          ln -sf /mnt/openwrt/build_dir/host /workdir/openwrt/build_dir/host  
+          ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir          
+          ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir  
           
       - name: Multi-thread compile
         id: Multi-thread
@@ -796,10 +675,10 @@ jobs:
         if: steps.Multi-thread.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success' && !cancelled() && job.status == 'success'
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt编译成功"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt编译成功
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt编译成功
        
       - name: WeChat notification - Final Failure
         if: failure() && !cancelled()
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt编译失败"
-          curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt编译失败
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt编译失败

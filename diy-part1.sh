@@ -49,4 +49,4 @@ git clone https://github.com/OpenWrt-Actions/luci-app-vssr.git package/luci-app-
 git clone https://github.com/jerrykuku/lua-maxminddb.git package/lua-maxminddb
 git clone https://github.com/jlzsss/luci-app-qbittorrent.git package/luci-app-qbittorrent
 # git clone https://github.com/jlzsss/qBittorrent-Enhanced-Edition.git package/feeds/packages/qBittorrent-Enhanced-Edition
-
+svn export --force https://github.com/coolsnowwolf/lede/branches/master/package/libs/pcre

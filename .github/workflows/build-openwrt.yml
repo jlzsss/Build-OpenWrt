@@ -293,6 +293,15 @@ jobs:
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
           df -hT
           
+      - name: Fix kernel config missing issue
+        run: |
+          cd openwrt
+          LINUX_VERSION=$(grep '^CONFIG_LINUX_' .config | sed -r 's/^CONFIG_LINUX_([0-9\.]+)=y/\1/')
+          KERNEL_CONFIG_DIR="build_dir/target-x86_64_musl/linux-x86_64/linux-${LINUX_VERSION}"
+          if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
+               cp .config "${KERNEL_CONFIG_DIR}/"
+          fi
+
       - name: Multi-thread compile
         id: Multi-thread
         run: |
@@ -431,6 +440,15 @@ jobs:
           ln -sf /mnt/openwrt/build_dir /workdir/openwrt/build_dir
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
           df -hT
+          
+      - name: Fix kernel config missing issue
+        run: |
+          cd openwrt
+          LINUX_VERSION=$(grep '^CONFIG_LINUX_' .config | sed -r 's/^CONFIG_LINUX_([0-9\.]+)=y/\1/')
+          KERNEL_CONFIG_DIR="build_dir/target-x86_64_musl/linux-x86_64/linux-${LINUX_VERSION}"
+          if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
+               cp .config "${KERNEL_CONFIG_DIR}/"
+          fi 
           
       - name: Multi-thread compile
         id: Multi-thread
@@ -571,6 +589,15 @@ jobs:
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
           df -hT
           
+      - name: Fix kernel config missing issue
+        run: |
+          cd openwrt
+          LINUX_VERSION=$(grep '^CONFIG_LINUX_' .config | sed -r 's/^CONFIG_LINUX_([0-9\.]+)=y/\1/')
+          KERNEL_CONFIG_DIR="build_dir/target-x86_64_musl/linux-x86_64/linux-${LINUX_VERSION}"
+          if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
+               cp .config "${KERNEL_CONFIG_DIR}/"
+          fi
+          
       - name: Multi-thread compile
         id: Multi-thread
         run: |
@@ -682,5 +709,4 @@ jobs:
         if: failure() && !cancelled()
         run: |
           curl -s -o /dev/null http://www.pushplus.plus/send --data "token=${{ secrets.PUSHPLUS_TOKEN }}&content=OpenWrt编译失败"
-          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt编译失败
-    
+          # curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=OpenWrt编译失败    

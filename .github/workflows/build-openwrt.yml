@@ -303,11 +303,9 @@ jobs:
            if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
            echo "Kernel .config 文件缺失，尝试重新生成"
            make target/linux/clean
-           make -j$(($(nproc) + 1)) target/linux/prepare V=s
-           # 如果仍然缺失，复制主配置
-           if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
-             cp .config "${KERNEL_CONFIG_DIR}/"
-           fi
+           make package/linux/clean
+           make -j$(($(nproc) + 1)) target/linux/compile
+           make -j$(($(nproc) + 1)) package/linux/compile
            fi
 
       - name: Multi-thread compile
@@ -459,13 +457,11 @@ jobs:
            if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
            echo "Kernel .config 文件缺失，尝试重新生成"
            make target/linux/clean
-           make -j$(($(nproc) + 1)) target/linux/prepare V=s
-           # 如果仍然缺失，复制主配置
-           if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
-             cp .config "${KERNEL_CONFIG_DIR}/"
+           make package/linux/clean
+           make -j$(($(nproc) + 1)) target/linux/compile
+           make -j$(($(nproc) + 1)) package/linux/compile
            fi
-           fi
-          
+           
       - name: Multi-thread compile
         id: Multi-thread
         run: |
@@ -605,24 +601,21 @@ jobs:
           ln -sf /mnt/openwrt/staging_dir /workdir/openwrt/staging_dir
           df -hT
 
-
       - name: Fix kernel config missing issue
         run: |
-          cd openwrt
-          # 从配置文件中获取 Linux 内核版本号
-          LINUX_VERSION=$(grep '^CONFIG_LINUX_' .config | sed -r 's/^CONFIG_LINUX_([0-9\.]+)=y/\1/')
-          KERNEL_CONFIG_DIR="build_dir/target-x86_64_musl/linux-x86_64/linux-${LINUX_VERSION}"
-          # 确保 kernel 配置文件存在
-          if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
-          echo "Kernel .config 文件缺失，尝试重新生成"
-          make target/linux/clean
-          make -j$(($(nproc) + 1)) target/linux/prepare V=s
-          # 如果仍然缺失，复制主配置
-          if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
-          cp .config "${KERNEL_CONFIG_DIR}/"
-          fi
-          fi       
- 
+           cd openwrt
+           # 从配置文件中获取 Linux 内核版本号
+           LINUX_VERSION=$(grep '^CONFIG_LINUX_' .config | sed -r 's/^CONFIG_LINUX_([0-9\.]+)=y/\1/')
+           KERNEL_CONFIG_DIR="build_dir/target-x86_64_musl/linux-x86_64/linux-${LINUX_VERSION}"
+           # 确保 kernel 配置文件存在
+           if [ ! -f "${KERNEL_CONFIG_DIR}/.config" ]; then
+           echo "Kernel .config 文件缺失，尝试重新生成"
+           make target/linux/clean
+           make package/linux/clean
+           make -j$(($(nproc) + 1)) target/linux/compile
+           make -j$(($(nproc) + 1)) package/linux/compile
+           fi
+           
       - name: Multi-thread compile
         id: Multi-thread
         run: |

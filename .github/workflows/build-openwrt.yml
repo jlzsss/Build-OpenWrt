@@ -48,7 +48,6 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo rm -rf /etc/apt/apt-mirrors.txt
           sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
           cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
@@ -227,7 +226,6 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo rm -rf /etc/apt/apt-mirrors.txt
           sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
           cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
@@ -386,7 +384,6 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo rm -rf /etc/apt/apt-mirrors.txt
           sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
           cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
@@ -544,7 +541,6 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo rm -rf /etc/apt/apt-mirrors.txt
           sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
           cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*

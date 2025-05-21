@@ -45,6 +45,7 @@ rm -rf feeds/liuran/GoQuiet
 rm -rf feeds/liuran/gost
 rm -rf feeds/kenzok8/3proxy/patches
 rm -rf feeds/packages/net/geoview
+rm -rf feeds/NueXini/luci-app-gost
 rm -rf feeds/NueXini/gost
 
 # ./scripts/feeds update -a

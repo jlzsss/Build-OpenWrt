@@ -48,14 +48,11 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo sed -i 's/^\(.*mirror+file:\/etc\/apt\/apt-mirrors.txt.*\)$/#\1/' /etc/apt/sources.list /etc/apt/sources.list.d/*
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
-          cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
+          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 clang ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev libarchive-tools
-          sudo -E systemctl daemon-reload
           sudo -E apt-get autoremove --purge
           sudo -E apt-get clean
           sudo timedatectl set-timezone "$TZ"
@@ -228,14 +225,11 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo sed -i 's/^\(.*mirror+file:\/etc\/apt\/apt-mirrors.txt.*\)$/#\1/' /etc/apt/sources.list /etc/apt/sources.list.d/*
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
-          cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
+          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 clang ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev libarchive-tools
-          sudo -E systemctl daemon-reload
           sudo -E apt-get autoremove --purge
           sudo -E apt-get clean
           sudo timedatectl set-timezone "$TZ"
@@ -388,14 +382,11 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo sed -i 's/^\(.*mirror+file:\/etc\/apt\/apt-mirrors.txt.*\)$/#\1/' /etc/apt/sources.list /etc/apt/sources.list.d/*
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
-          cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
+          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 clang ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev libarchive-tools
-          sudo -E systemctl daemon-reload
           sudo -E apt-get autoremove --purge
           sudo -E apt-get clean
           sudo timedatectl set-timezone "$TZ"
@@ -547,14 +538,11 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker image prune -a -f
-          sudo sed -i 's/^\(.*mirror+file:\/etc\/apt\/apt-mirrors.txt.*\)$/#\1/' /etc/apt/sources.list /etc/apt/sources.list.d/*
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -y purge azure-cli* ghc* zulu* llvm* firefox* google* dotnet* openjdk* mysql* php* android* mongodb* moby* snapd* libreoffice* gnome* unity-webapps-common lxd printer* cups* foomatic* hplip* bluez* aisleriot* shotwell* rhythmbox* thunderbird* transmission* totem* cheese* \
-          cloud-init cloud-guest-utils cloud-initramfs-copymods cloud-initramfs-dyn-netconf ubuntu-server landscape-common linux-cloud-tools-common linux-cloud-tools-generic linux-firmware linux-tools-generic linux-modules-extra-$(uname -r) linux-headers-$(uname -r) language-pack* aspnetcore-targeting-pack*
+          sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* openjdk* mysql* php* mongodb* dotnet* snap*
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 clang ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev libarchive-tools
-          sudo -E systemctl daemon-reload
           sudo -E apt-get autoremove --purge
           sudo -E apt-get clean
           sudo timedatectl set-timezone "$TZ"

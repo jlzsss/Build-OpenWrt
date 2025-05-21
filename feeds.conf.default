@@ -5,10 +5,11 @@ src-git routing https://github.com/coolsnowwolf/routing
 src-git telephony https://github.com/coolsnowwolf/telephony.git
 src-git helloworld https://github.com/fw876/helloworld.git
 src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main
-src-git NueXini https://github.com/NueXini/NueXini_Packages.git
+src-git luci_app_xray https://github.com/yichya/luci-app-xray
 src-git kenzo https://github.com/kenzok8/openwrt-packages.git
 src-git small https://github.com/kenzok8/small.git
 src-git kenzok8 https://github.com/kenzok8/jell.git
+src-git NueXini https://github.com/NueXini/NueXini_Packages.git
 src-git packages3 https://github.com/xiangfeidexiaohuo/openwrt-packages.git
 src-git liuran https://github.com/liuran001/openwrt-packages;packages
 src-git other https://github.com/Lienol/openwrt-package.git;other

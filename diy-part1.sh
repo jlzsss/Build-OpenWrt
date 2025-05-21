@@ -18,8 +18,7 @@ git clone https://github.com/kuoruan/luci-app-kcptun.git package/luci-app-kcptun
 git clone https://github.com/jlzsss/openwrt-kcptun.git package/kcptun
 git clone https://github.com/jlzsss/openwrt-miredo.git package/miredo
 git clone https://github.com/Mleaf/openwrt-mwol.git package/mwol
-git clone https://github.com/yichya/luci-app-xray.git package/luci-app-xray
-git clone https://github.com/xiechangan123/luci-i18n-xray-zh-cn.git package/luci-i18n-xray-zh-cn
+git clone https://github.com/yichya/openwrt-xray-geodata-cut.git package/xray-geodata
 git clone -b luci2 https://github.com/jlzsss/luci-app-v2ray.git package/luci-app-v2ray
 git clone https://github.com/frainzy1477/luci-app-trojan.git package/luci-app-trojan
 git clone -b test https://github.com/frainzy1477/luci-app-clash.git package/luci-app-clash
@@ -48,5 +47,6 @@ git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone https://github.com/OpenWrt-Actions/luci-app-vssr.git package/luci-app-vssr
 git clone https://github.com/jerrykuku/lua-maxminddb.git package/lua-maxminddb
 git clone https://github.com/jlzsss/luci-app-qbittorrent.git package/luci-app-qbittorrent
-# git clone --depth 1 --filter=blob:none --sparse https://github.com/coolsnowwolf/lede.git temp-lede && cd temp-lede && git sparse-checkout set package/libs/pcre && cd .. && mkdir -p package/pcre && mv temp-lede/package/libs/pcre package/pcre && rm -rf temp-lede
+# git clone --depth 1 --filter=blob:none --sparse https://github.com/coolsnowwolf/lede.git temp-lede && cd temp-lede && git sparse-checkout set pcre && cd openwrt && mv temp-lede/package/libs/pcre package && rm -rf temp-lede
 # git clone https://github.com/jlzsss/qBittorrent-Enhanced-Edition.git package/feeds/packages/qBittorrent-Enhanced-Edition
+

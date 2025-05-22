@@ -316,7 +316,7 @@ jobs:
           cd openwrt
           echo -e "$(($(nproc) + 1)) thread compile"
           make -j$(($(nproc) + 1)) package/luci/compile
-          make -j$(($(nproc) + 1)) package/{luci-app-xray,luci-app-qbittorrent,luci-app-passwall,luci-app-shadowsocksr,luci-app-vssr,luci-app-adblock-fast,luci-app-adbyby-plus,luci-app-adguardhome,luci-app-transmission,luci-app-aria2,luci-app-bypass,luci-app-homeproxy,luci-app-kcptun,luci-app-openclash,luci-app-passwall2,luci-app-smartdns,luci-app-ssr-plus,luci-app-store,luci-app-trojan,luci-app-v2ray,luci-app-v2raya}/compile
+          make -j$(($(nproc) + 1)) package/{luci-app-qbittorrent,luci-app-passwall,luci-app-shadowsocksr,luci-app-vssr,luci-app-adblock-fast,luci-app-adbyby-plus,luci-app-adguardhome,luci-app-transmission,luci-app-aria2,luci-app-bypass,luci-app-homeproxy,luci-app-kcptun,luci-app-openclash,luci-app-passwall2,luci-app-smartdns,luci-app-ssr-plus,luci-app-store,luci-app-trojan,luci-app-v2ray,luci-app-v2raya}/compile
           echo "::set-output name=status::success"
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
@@ -329,7 +329,7 @@ jobs:
         run: |
           cd openwrt
           make -j1 package/luci/compile V=s
-          make -j1 package/{luci-app-xray,luci-app-qbittorrent,luci-app-passwall,luci-app-shadowsocksr,luci-app-vssr,luci-app-adblock-fast,luci-app-adbyby-plus,luci-app-adguardhome,luci-app-transmission,luci-app-aria2,luci-app-bypass,luci-app-homeproxy,luci-app-kcptun,luci-app-openclash,luci-app-passwall2,luci-app-smartdns,luci-app-ssr-plus,luci-app-store,luci-app-trojan,luci-app-v2ray,luci-app-v2raya}/compile V=s
+          make -j1 package/{luci-app-qbittorrent,luci-app-passwall,luci-app-shadowsocksr,luci-app-vssr,luci-app-adblock-fast,luci-app-adbyby-plus,luci-app-adguardhome,luci-app-transmission,luci-app-aria2,luci-app-bypass,luci-app-homeproxy,luci-app-kcptun,luci-app-openclash,luci-app-passwall2,luci-app-smartdns,luci-app-ssr-plus,luci-app-store,luci-app-trojan,luci-app-v2ray,luci-app-v2raya}/compile V=s
           echo "::set-output name=status::success"
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV

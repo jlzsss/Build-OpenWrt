@@ -658,7 +658,7 @@ jobs:
         if: steps.Multi-thread.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success'
         with:
           name: OpenWrt_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-          path: openwrt
+          path: openwrt/bin
 
       - name: Organize files
         id: organize
@@ -668,7 +668,7 @@ jobs:
           rm -rf openwrt/bin/targets
           echo "::set-output name=status::success"
           Compress-Archive -Path /workdir/openwrt/bin/packages OpenWrt_packages${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip
-          Compress-Archive -Path /workdir/openwrt OpenWrt_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.tar.gz
+          Compress-Archive -Path /workdir/openwrt/bin OpenWrt_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.tar.gz
 
       - name: Upload files to cowtransfer
         id: cowtransfer

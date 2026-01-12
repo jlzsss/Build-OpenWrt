@@ -26,11 +26,11 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-24.10
   CHOOSE_VERSION: v24.10.4
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
-  DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: diy-part2.sh
-  DIY_P3_SH: diy-part3.sh
+  FEEDS_CONF: Immortalwrt/feeds.conf.default
+  CONFIG_FILE: Immortalwrt/.config
+  DIY_P1_SH: Immortalwrt/diy-part1.sh
+  DIY_P2_SH: Immortalwrt/diy-part2.sh
+  DIY_P3_SH: Immortalwrt/diy-part3.sh
   SCKEY: ${{ secrets.SCKEY }}
   GH_TOKEN: ${{ github.token }}
   PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
@@ -60,7 +60,7 @@ jobs:
           docker image prune -a -f
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* docker* ghc* llvm* firefox google* mysql*
-          sudo mv ${GITHUB_WORKSPACE}/sources-24.04.list /etc/apt/sources.list.d/
+          sudo mv ${GITHUB_WORKSPACE}/Immortalwrt/sources-24.04.list /etc/apt/sources.list.d/
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y --allow-downgrades build-essential flex bison cmake clang g++ gawk gcc-multilib g++-multilib gettext git-man=1:2.43.* git gnutls-dev libfuse-dev libncurses5-dev libssl-dev python3 python3-pip python3-ply python3-pyelftools rsync unzip zlib1g-dev file wget subversion patch upx-ucl autoconf automake curl asciidoc binutils bzip2 lib32gcc-s1 libc6-dev-i386 uglifyjs msmtp texinfo libreadline-dev libglib2.0-dev xmlto libelf-dev libtool autopoint antlr3 gperf ccache swig coreutils haveged scons libpython3-dev rename qemu-utils jq gh libarchive-tools
@@ -134,8 +134,8 @@ jobs:
           chmod +x $DIY_P3_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P3_SH
-          mv ${GITHUB_WORKSPACE}/patches/002-dapnet-gateway_Conf.cpp.patch ${GITHUB_WORKSPACE}/openwrt/feeds/kenzok8/dapnet-gateway/patches
-          find "${GITHUB_WORKSPACE}/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%' | patch -d '${GITHUB_WORKSPACE}/openwrt' -p1 --forward"
+          mv ${GITHUB_WORKSPACE}/Immortalwrt/patches/002-dapnet-gateway_Conf.cpp.patch ${GITHUB_WORKSPACE}/openwrt/feeds/kenzok8/dapnet-gateway/patches
+          find "${GITHUB_WORKSPACE}/Immortalwrt/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%' | patch -d '${GITHUB_WORKSPACE}/openwrt' -p1 --forward"
 
       - name: SSH connection to Actions
         uses: P3TERX/ssh2actions@v1.0.0
@@ -236,7 +236,7 @@ jobs:
           docker image prune -a -f
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* docker* ghc* llvm* firefox google* mysql*
-          sudo mv ${GITHUB_WORKSPACE}/sources-24.04.list /etc/apt/sources.list.d/
+          sudo mv ${GITHUB_WORKSPACE}/Immortalwrt/sources-24.04.list /etc/apt/sources.list.d/
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y --allow-downgrades build-essential flex bison cmake clang g++ gawk gcc-multilib g++-multilib gettext git-man=1:2.43.* git gnutls-dev libfuse-dev libncurses5-dev libssl-dev python3 python3-pip python3-ply python3-pyelftools rsync unzip zlib1g-dev file wget subversion patch upx-ucl autoconf automake curl asciidoc binutils bzip2 lib32gcc-s1 libc6-dev-i386 uglifyjs msmtp texinfo libreadline-dev libglib2.0-dev xmlto libelf-dev libtool autopoint antlr3 gperf ccache swig coreutils haveged scons libpython3-dev rename qemu-utils jq libarchive-tools
@@ -407,7 +407,7 @@ jobs:
           docker image prune -a -f
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* docker* ghc* llvm* firefox google* mysql*
-          sudo mv ${GITHUB_WORKSPACE}/sources-24.04.list /etc/apt/sources.list.d/
+          sudo mv ${GITHUB_WORKSPACE}/Immortalwrt/sources-24.04.list /etc/apt/sources.list.d/
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y --allow-downgrades build-essential flex bison cmake clang g++ gawk gcc-multilib g++-multilib gettext git-man=1:2.43.* git gnutls-dev libfuse-dev libncurses5-dev libssl-dev python3 python3-pip python3-ply python3-pyelftools rsync unzip zlib1g-dev file wget subversion patch upx-ucl autoconf automake curl asciidoc binutils bzip2 lib32gcc-s1 libc6-dev-i386 uglifyjs msmtp texinfo libreadline-dev libglib2.0-dev xmlto libelf-dev libtool autopoint antlr3 gperf ccache swig coreutils haveged scons libpython3-dev rename qemu-utils jq libarchive-tools
@@ -581,7 +581,7 @@ jobs:
           docker image prune -a -f
           sudo -E rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/ghc
           sudo -E apt-get -y purge azure-cli* docker* ghc* llvm* firefox google* mysql*
-          sudo mv ${GITHUB_WORKSPACE}/sources-24.04.list /etc/apt/sources.list.d/
+          sudo mv ${GITHUB_WORKSPACE}/Immortalwrt/sources-24.04.list /etc/apt/sources.list.d/
           sudo -E apt-get update -y
           sudo -E apt-get full-upgrade -y
           sudo -E apt-get install -y --allow-downgrades build-essential flex bison cmake clang g++ gawk gcc-multilib g++-multilib gettext git-man=1:2.43.* git gnutls-dev libfuse-dev libncurses5-dev libssl-dev python3 python3-pip python3-ply python3-pyelftools rsync unzip zlib1g-dev file wget subversion patch upx-ucl autoconf automake curl asciidoc binutils bzip2 lib32gcc-s1 libc6-dev-i386 uglifyjs msmtp texinfo libreadline-dev libglib2.0-dev xmlto libelf-dev libtool autopoint antlr3 gperf ccache swig coreutils haveged scons libpython3-dev rename qemu-utils jq libarchive-tools

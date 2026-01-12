@@ -1,4 +1,4 @@
-name: Build-ImmortalWrt
+name: Build-Lede
 
 on:
   repository_dispatch:
@@ -23,9 +23,8 @@ env:
   CCACHE_DIR: /mnt/ccache
   CCACHE_MAXSIZE: 3G
   CCACHE_COMPRESS: true
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-24.10
-  CHOOSE_VERSION: v24.10.4
+  REPO_URL: https://github.com/coolsnowwolf/lede.git
+  REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -85,11 +84,6 @@ jobs:
         run: |
           git clone -b $REPO_BRANCH --single-branch $REPO_URL openwrt
           ln -sf /workdir/openwrt ${{ github.workspace }}/openwrt
-
-      - name: Choose openwrt version
-        run: |
-          cd openwrt
-          git checkout $CHOOSE_VERSION
 
       - name: Free up disk space
         if: env.FREE_UP_DISK == 'true'

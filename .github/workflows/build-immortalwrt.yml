@@ -794,6 +794,11 @@ jobs:
         run: |
           echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
           touch release.txt
+          echo "# ImmortalWrt 固件构建" >> release.txt
+          echo "" >> release.txt
+          echo "基于 ImmortalWrt 源码构建的 OpenWrt 固件" >> release.txt
+          echo "版本: $CHOOSE_VERSION" >> release.txt
+          echo "" >> release.txt
           [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
           [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
           echo "status=success" >> $GITHUB_OUTPUT

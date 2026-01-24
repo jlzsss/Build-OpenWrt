@@ -11,11 +11,11 @@
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
-git clone https://github.com/jlzsss/luci-app-shadowsocksr.git package/luci-app-shadowsocksr
-# git clone https://github.com/jlzsss/openwrt-dnsmasq-extra.git package/openwrt-dnsmasq-extra
-git clone https://github.com/tty228/luci-app-serverchan.git package/luci-app-serverchan
-git clone https://github.com/peter-tank/openwrt-minisign.git package/minisign
-git clone https://github.com/aa65535/openwrt-chinadns.git package/chinadns
+git clone --depth 1 https://github.com/jlzsss/luci-app-shadowsocksr.git package/luci-app-shadowsocksr
+# git clone --depth 1 https://github.com/jlzsss/openwrt-dnsmasq-extra.git package/openwrt-dnsmasq-extra
+git clone --depth 1 https://github.com/tty228/luci-app-serverchan.git package/luci-app-serverchan
+git clone --depth 1 https://github.com/peter-tank/openwrt-minisign.git package/minisign
+git clone --depth 1 https://github.com/aa65535/openwrt-chinadns.git package/chinadns
 rm -rf feeds/kenzok8/luci-app-qbittorrent
 rm -rf feeds/kenzok8/qbittorrent
 rm -rf feeds/kenzok8/qBittorrent

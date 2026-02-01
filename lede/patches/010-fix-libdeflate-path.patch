@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -478,6 +478,8 @@ if(USE_SYSTEM_DEFLATE)
+         cmake/FindDEFLATE.cmake
+         CMAKE_MODULE_PATH
+         )
++    set(DEFLATE_INCLUDE_DIR ${CMAKE_STAGING_PREFIX}/usr/include)
++    set(DEFLATE_LIBRARY ${CMAKE_STAGING_PREFIX}/usr/lib/libdeflate.so)
+     find_package(DEFLATE 1.7)
+     set(HAVE_DEFLATE ${DEFLATE_FOUND})
+ else()

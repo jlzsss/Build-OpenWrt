@@ -28,13 +28,9 @@ rm -rf feeds/kenzok8/luci-app-xray
 rm -rf feeds/kenzok8/luci-app-xray-status
 rm -rf feeds/lede/qBittorrent
 rm -rf feeds/lede/qBittorrent-Enhanced-Edition
-rm -rf feeds/luci/transmission
-rm -rf feeds/luci/transmission-web-control
 rm -rf feeds/luci2/luci-app-turboacc
 ./scripts/feeds install -p packages2 quickstart
 ./scripts/feeds install -p packages2 luci-app-quickstart
-./scripts/feeds install -p luci2 transmission
-./scripts/feeds install -p luci2 transmission-web-control
 rm -rf feeds/packages/net/{qBittorrent,qBittorrent-static,xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,trojan-plus,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls}
 rm -rf package/feeds/lede/php7
 # rm -rf package/feeds/packages/php7

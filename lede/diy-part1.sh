@@ -51,7 +51,6 @@ git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone --depth 1 https://github.com/OpenWrt-Actions/luci-app-vssr.git package/luci-app-vssr
 git clone --depth 1 https://github.com/jerrykuku/lua-maxminddb.git package/lua-maxminddb
 git clone --depth 1 https://github.com/jlzsss/luci-app-qbittorrent.git package/luci-app-qbittorrent
-git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set libs/libb64 && cd .. && rm -rf feeds/packages/libs/libb64 && mv temp-lede/libs/libb64 feeds/packages/libs && rm -rf temp-lede
 # git clone --depth 1 --filter=blob:none --sparse https://github.com/xiaorouji/openwrt-passwall-packages.git temp-lede && cd temp-lede && git sparse-checkout set geoview && cd .. && mkdir -p package/geoview && mv temp-lede/geoview package/ && rm -rf temp-lede
 # git clone --depth 1 --filter=blob:none --sparse https://github.com/coolsnowwolf/lede.git temp-lede && cd temp-lede && git sparse-checkout set package/libs/pcre && cd .. && mkdir -p package/pcre && mv temp-lede/package/libs/pcre package/pcre && rm -rf temp-lede
 # git clone --depth 1 https://github.com/jlzsss/qBittorrent-Enhanced-Edition.git package/feeds/packages/qBittorrent-Enhanced-Edition

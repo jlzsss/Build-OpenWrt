@@ -1,0 +1,33 @@
+Subject: [PATCH] python-setuptools: drop stale python3-pkg-resources dependency
+
+Old feeds (e.g. openwrt-24.10 python-setuptools 80.9.0) declare
+  DEPENDS:=+python3 +python3-pkg-resources
+but python3-pkg-resources is only built when explicitly selected, and
+new feeds (setuptools>=82, 84.0.0, 2026-08-30) deleted the subpackage
+entirely. An unselected/missing provider makes opkg reject the
+setuptools candidate:
+
+ * pkg_hash_check_unresolved: cannot find dependency python3-pkg-resources
+   for python3-setuptools
+ * pkg_hash_fetch_best_installation_candidate: ... incompatible with the
+   architectures configured
+
+setuptools runtime does not need pkg_resources (removed upstream), so
+drop the dependency. On new feeds this hunk no longer matches (already
+DEPENDS:=+python3) -- apply with `patch --forward || true` or guard with
+grep, then refresh package metadata.
+
+Converted via: quilt new / quilt add / edit / quilt refresh.
+Applies to (old feed only): feeds/packages/lang/python/python-setuptools/Makefile
+
+--- a/feeds/packages/lang/python/python-setuptools/Makefile
++++ b/feeds/packages/lang/python/python-setuptools/Makefile
+@@ -39,7 +39,7 @@ endef
+ define Package/python3-setuptools
+ $(call Package/python3-setuptools/Default)
+   TITLE:=Fully-featured library to package Python projects
+-  DEPENDS:=+python3 +python3-pkg-resources
++  DEPENDS:=+python3
+ endef
+
+ define Package/python3-setuptools/description/Default

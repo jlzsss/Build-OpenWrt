@@ -1,0 +1,31 @@
+Subject: [PATCH] luci-app-netspeedtest: drop python3-pkg-resources dependency
+
+Upstream setuptools>=82 removed pkg_resources; feeds (84.0.0) no longer
+carry python3-pkg-resources, and old feeds (80.9.0) only build it when
+explicitly selected. netspeedtest's python payload (usr/bin/speedtest)
+uses stdlib only (urllib/ssl/json/xml, no pkg_resources/setuptools
+import), so the LUCI_DEPENDS entry is spurious legacy. Drop it instead
+of swapping to python3-setuptools to avoid pulling the broken
+setuptools->pkg-resources chain and to keep the image lean.
+
+Converted via: quilt new / quilt add / edit / quilt refresh.
+Fixes:
+ * pkg_hash_check_unresolved: cannot find dependency python3-pkg-resources
+   for python3-setuptools
+ * satisfy_dependencies_for: Cannot satisfy python3-pkg-resources
+   for luci-app-netspeedtest
+
+Applies to: package/netspeedtest/luci-app-netspeedtest/Makefile
+(sirpdboy/netspeedtest bundle repo cloned in diy-part1.sh).
+
+--- a/package/netspeedtest/luci-app-netspeedtest/Makefile
++++ b/package/netspeedtest/luci-app-netspeedtest/Makefile
+@@ -13,7 +13,7 @@ PKG_VERSION:=5.2.1
+ PKG_RELEASE:=20260322
+
+ LUCI_TITLE:=LuCI Support for netspeedtest
+-LUCI_DEPENDS:=+ookla-speedtest +homebox +python3-light +python3-pkg-resources +python3-xml +python3-email \
++LUCI_DEPENDS:=+ookla-speedtest +homebox +python3-light +python3-xml +python3-email \
+ 	  +python3-urllib +python3-codecs +python3-openssl +jq $(if $(find_package iperf3-ssl),+iperf3-ssl,+iperf3)
+ LUCI_PKGARCH:=all
+ PKG_MAINTAINER:=sirpdboy  <herboy2008@gmail.com>

@@ -17,6 +17,8 @@ rm -rf feeds/packages/net/transmission-web-control
 rm -rf feeds/small/geoview
 rm -rf feeds/kenzok8/geoview
 rm -rf feeds/packages/lang/golang
-git clone --depth 1 https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+git clone --depth 1 https://github.com/sbwml/packages_lang_golang -b 27.x feeds/packages/lang/golang
 git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set net/uwsgi && cd .. && rm -rf feeds/packages/net/uwsgi && mv temp-lede/net/uwsgi feeds/packages/net && rm -rf temp-lede
 git clone --depth 1 --filter=blob:none --sparse https://github.com/coolsnowwolf/packages.git temp-lede && cd temp-lede && git sparse-checkout set lang/rust && cd .. && rm -rf feeds/packages/lang/rust && mv temp-lede/lang/rust feeds/packages/lang && rm -rf temp-lede
+git clone --depth 1 --filter=blob:none --sparse https://github.com/openwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set lang/lua/lua5.4 && cd .. && rm -rf feeds/packages/lang/lua/lua5.4 && mv temp-lede/lang/lua/lua5.4 feeds/packages/lang/lua/ && rm -rf temp-lede
+git clone --depth 1 --filter=blob:none --sparse https://github.com/openwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set utils/dockerd utils/containerd utils/runc utils/tini utils/docker && cd .. && rm -rf feeds/packages/utils/dockerd feeds/packages/utils/containerd feeds/packages/utils/runc feeds/packages/utils/tini feeds/packages/utils/docker && mv temp-lede/utils/dockerd temp-lede/utils/containerd temp-lede/utils/runc temp-lede/utils/tini temp-lede/utils/docker feeds/packages/utils/ && rm -rf temp-lede

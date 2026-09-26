@@ -14,11 +14,26 @@
 # rm -rf feeds/packages2/lang/python
 rm -rf feeds/packages/net/transmission
 rm -rf feeds/packages/net/transmission-web-control
+
 rm -rf feeds/small/geoview
 rm -rf feeds/kenzok8/geoview
 rm -rf feeds/packages/lang/golang
-git clone --depth 1 https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+git clone --depth 1 https://github.com/sbwml/packages_lang_golang -b 27.x feeds/packages/lang/golang
+
+# Fix vim-fuller build failure: remove cp of vim runtime files that may not exist
+# The Makefile uses $(VIMVER) variable, not literal "vim82"
+sed -i '/\$(CP) \$(PKG_INSTALL_DIR).*vim\$(VIMVER)/d' feeds/packages/utils/vim/Makefile 2>/dev/null || true
+
+# Fix miniupnpd download failure: keep only official feeds/packages/net/miniupnpd-nftables and miniupnp
+# Remove all third-party miniupnpd/miniupnp packages to avoid conflicts
+rm -rf feeds/kenzok8/miniupnpd*
+rm -rf feeds/kenzok8/miniupnp*
+rm -rf feeds/small/miniupnpd*
+rm -rf feeds/small/miniupnp*
 git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set net/uwsgi && cd .. && rm -rf feeds/packages/net/uwsgi && mv temp-lede/net/uwsgi feeds/packages/net && rm -rf temp-lede
+git clone --depth 1 --filter=blob:none --sparse https://github.com/openwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set lang/lua/lua5.4 && cd .. && rm -rf feeds/packages/lang/lua/lua5.4 && mv temp-lede/lang/lua/lua5.4 feeds/packages/lang/lua/ && rm -rf temp-lede
+git clone --depth 1 --filter=blob:none --sparse https://github.com/openwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set utils/dockerd utils/containerd utils/runc utils/tini utils/docker && cd .. && rm -rf feeds/packages/utils/dockerd feeds/packages/utils/containerd feeds/packages/utils/runc feeds/packages/utils/tini feeds/packages/utils/docker && mv temp-lede/utils/dockerd temp-lede/utils/containerd temp-lede/utils/runc temp-lede/utils/tini temp-lede/utils/docker feeds/packages/utils/ && rm -rf temp-lede
+
 # git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set libs/libb64 && cd .. && rm -rf feeds/packages/libs/libb64 && mv temp-lede/libs/libb64 feeds/packages/libs && rm -rf temp-lede
 # git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set net/transmission && cd .. && rm -rf feeds/packages/net/transmission && mv temp-lede/net/transmission feeds/packages/net && rm -rf temp-lede
 # git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/packages.git temp-lede && cd temp-lede && git sparse-checkout set net/transmission-web-control && cd .. && rm -rf feeds/packages/net/transmission-web-control && mv temp-lede/net/transmission-web-control feeds/packages/net && rm -rf temp-lede

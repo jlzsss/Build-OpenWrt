@@ -1,0 +1,56 @@
+Subject: [PATCH] clashoo: use nikki's mihomo instead of shipping its own
+
+clashoo PROVIDES mihomo and installs its own Go-built mihomo binary,
+conflicting with feeds/packages/net/mihomo (and with nikki once nikki
+depends on the feed mihomo, see 005). Drop mihomo from PROVIDES (keep
+clash-meta), depend on +nikki, and stop installing the Go-built binary.
+
+Applied to both providers: feeds/small and feeds/kenzok8 (jell).
+Converted from the clashoo sed loop in diy-part3.sh via quilt.
+NOTE: the Go toolchain build itself is left intact (same as the script);
+only the Install/Bin step is removed, so the binary is compiled but not
+shipped. Dropping the whole Go build would additionally require
+GO_ARCH_DEPENDS/golang-package.mk cleanup.
+
+--- a/feeds/kenzok8/clashoo/Makefile
++++ b/feeds/kenzok8/clashoo/Makefile
+@@ -35,8 +35,8 @@ define Package/clashoo
+   SECTION:=net
+   CATEGORY:=Network
+   TITLE:=Clashoo (Mihomo)
+-  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip
+-  PROVIDES:=mihomo clash-meta
++  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip +nikki
++  PROVIDES:=clash-meta
+ endef
+
+ define Package/clashoo/description
+@@ -48,7 +48,6 @@ define Package/clashoo/conffiles
+ endef
+
+ define Package/clashoo/install
+-	$(call GoPackage/Package/Install/Bin,$(1))
+
+ 	$(INSTALL_DIR) $(1)/usr/bin
+ 	ln -sf /usr/bin/mihomo $(1)/usr/bin/clash-meta
+--- a/feeds/small/clashoo/Makefile
++++ b/feeds/small/clashoo/Makefile
+@@ -35,8 +35,8 @@ define Package/clashoo
+   SECTION:=net
+   CATEGORY:=Network
+   TITLE:=Clashoo (Mihomo)
+-  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip
+-  PROVIDES:=mihomo clash-meta
++  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip +nikki
++  PROVIDES:=clash-meta
+ endef
+
+ define Package/clashoo/description
+@@ -48,7 +48,6 @@ define Package/clashoo/conffiles
+ endef
+
+ define Package/clashoo/install
+-	$(call GoPackage/Package/Install/Bin,$(1))
+
+ 	$(INSTALL_DIR) $(1)/usr/bin
+ 	ln -sf /usr/bin/mihomo $(1)/usr/bin/clash-meta

@@ -1,0 +1,32 @@
+Subject: [PATCH] luci-app-fchomo: drop postinst minimum-version check
+
+The postinst revision check ("Minimum OpenWrt version required is
+24.10", r28158) fails on lede snapshots and some 24.10 point releases,
+breaking package/install. Remove the check line; the surrounding
+REVISION probing becomes inert but is harmless.
+
+Applied to both providers: feeds/small and feeds/kenzok8 (jell).
+Converted from Method 3 of the fchomo block in diy-part3.sh via quilt.
+(Methods 1-2 target postinst/uci-defaults files that do not exist
+upstream and were silent no-ops.)
+
+--- a/feeds/kenzok8/luci-app-fchomo/Makefile
++++ b/feeds/kenzok8/luci-app-fchomo/Makefile
+@@ -48,7 +48,6 @@ else
+ 	REVISION=$$(ubus call system board | jsonfilter -qe '@.release.revision' | cut -f1 -d'-' | sed 's|[a-z]||gi')
+ fi
+
+-[ "$$REVISION" -ge 28158 -o "$$REVISION" -eq 0 ] || { 2>&1 echo "Minimum OpenWrt version required is 24.10."; exit 1; }
+ # https://archive.openwrt.org/releases/**/version.buildinfo
+ # r?????-??????????    25.??.?-rc1
+ # r28158-d276b4c91a    24.10.0-rc1
+--- a/feeds/small/luci-app-fchomo/Makefile
++++ b/feeds/small/luci-app-fchomo/Makefile
+@@ -48,7 +48,6 @@ else
+ 	REVISION=$$(ubus call system board | jsonfilter -qe '@.release.revision' | cut -f1 -d'-' | sed 's|[a-z]||gi')
+ fi
+
+-[ "$$REVISION" -ge 28158 -o "$$REVISION" -eq 0 ] || { 2>&1 echo "Minimum OpenWrt version required is 24.10."; exit 1; }
+ # https://archive.openwrt.org/releases/**/version.buildinfo
+ # r?????-??????????    25.??.?-rc1
+ # r28158-d276b4c91a    24.10.0-rc1

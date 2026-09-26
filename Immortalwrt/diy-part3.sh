@@ -120,24 +120,3 @@ echo "=== Go cgo fix done ==="
 # ./scripts/feeds install -p Joecaicai qBittorrent-Enhanced-Edition
 # ./scripts/feeds install -a
 
-# ============================================================
-# fchomo / netspeedtest 修复同样走 quilt patches（与 lede 同内容）：
-#   Immortalwrt/patches/007-fchomo-drop-postinst-version-check.patch
-#   Immortalwrt/patches/008-netspeedtest-use-setuptools.patch
-# 由 workflow 统一打上，此处不再做 sed。
-# ============================================================
-echo "=== Ensuring python3-setuptools selected in .config ==="
-if [ -f .config ]; then
-  # python3-pkg-resources 在 pinned immortalwrt/packages 里不存在，
-  # 008 已把 netspeedtest 依赖换成 setuptools，这里同步 .config
-  sed -i '/^CONFIG_PACKAGE_python3-pkg-resources=y$/d' .config
-  sed -i '/# CONFIG_PACKAGE_python3-setuptools is not set/d' .config
-  sed -i '/^CONFIG_PACKAGE_python3-setuptools=y$/d' .config
-  printf 'CONFIG_PACKAGE_python3-setuptools=y\n' >> .config
-  echo "  -> selected python3-setuptools, dropped stale pkg-resources"
-  make defconfig
-  echo "  -> make defconfig done"
-else
-  echo "  WARNING: .config not found"
-fi
-echo "=== .config fix done ===" 

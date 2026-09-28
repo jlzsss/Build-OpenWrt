@@ -495,6 +495,21 @@ jobs:
           echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
           ccache -s
 
+      - name: Trim firmware files - only keep combined images
+        if: steps.final-compile.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success'
+        run: |
+          cd openwrt
+          FW_DIR="${FIRMWARE_PATH:-}"
+          if [ -z "$FW_DIR" ]; then
+            FW_DIR=$(dirname $(find bin/targets -name '*-squashfs-combined.img.gz' -print -quit))
+          fi
+          echo "Firmware dir: $FW_DIR"
+          ls -lh "$FW_DIR" || true
+          find "$FW_DIR" -maxdepth 1 -type f ! -name '*-squashfs-combined.img.gz' ! -name '*-squashfs-combined-efi.img.gz' -delete || true
+          rm -rf "$FW_DIR/packages" || true
+          echo "After trim:"
+          ls -lh "$FW_DIR"
+
       # 新增步骤：收集并上传所有 .ipk 文件
       - name: Collect IPK files
         id: collect_ipks
@@ -540,7 +555,7 @@ jobs:
         if: steps.final-compile.outputs.status == 'success' || steps.Single-thread.outputs.status == 'success'
         with:
           name: OpenWrt_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-          path: openwrt/bin
+          path: openwrt/bin/targets/x86/64/*squashfs-combined*.img.gz
 
       - name: Organize files
         id: organize
@@ -625,7 +640,7 @@ jobs:
           files: openwrt/${{ steps.prepare_ipk_release.outputs.IPK_ARCHIVE }}
           append_body: true # 追加到 release 正文
 
-      - name: Upload other files to release
+      - name: Upload firmware to release - only combined img.gz
         uses: softprops/action-gh-release@v2
         if: steps.tag.outputs.status == 'success' && !cancelled()
         env:
@@ -634,8 +649,8 @@ jobs:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: |
-            openwrt/OpenWrt_packages${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip
-            openwrt/OpenWrt_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.tar.gz
+            openwrt/bin/targets/x86/64/*squashfs-combined.img.gz
+            openwrt/bin/targets/x86/64/*squashfs-combined-efi.img.gz
 
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main

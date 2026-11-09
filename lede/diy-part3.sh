@@ -71,11 +71,15 @@ rm -rf feeds/liuran/mihomo
 
 # ============================================================
 # 以下修复已转为 quilt 树级 patches，见 lede/patches/：
-#   005-nikki-depend-on-feed-mihomo.patch        (原 nikki sed 块)
 #   006-clashoo-use-nikki-mihomo.patch           (原 clashoo sed 循环)
 #   007-fchomo-drop-postinst-version-check.patch (原 fchomo Method 3)
 # 由 workflow 在 diy-part3.sh 之后统一 `patch -p1 --forward` 打上，
 # 此处不再做 sed（重复施加会导致 patch 失败）。
+# 005-nikki-depend-on-feed-mihomo.patch 已删除：当前上游
+# coolsnowwolf/packages 的 net/nikki 已重构为纯 config wrapper
+# (无 Go 编译、无 PROVIDES、DEPENDS 自带 +mihomo、init 直接用
+# /usr/bin/mihomo)，正是该补丁想达到的目标状态，旧补丁不再适用。
+# feeds/packages/net/mihomo 仍是唯一 mihomo 提供者。
 # kmod-ixgbe 的 +kmod-libie sed 已删除：当前 lede master 的
 # netdevices.mk 已改为条件依赖 (+LINUX_6_12:kmod-libie …)，
 # 旧 pattern 匹配不上，且 .config 已选中 kmod-libie，无需再改。

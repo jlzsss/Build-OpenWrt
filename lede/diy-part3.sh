@@ -29,17 +29,16 @@ rm -rf feeds/kenzok8/luci-app-xray-status
 rm -rf feeds/lede/qBittorrent
 rm -rf feeds/lede/qBittorrent-Enhanced-Edition
 rm -rf feeds/luci2/luci-app-turboacc
-./scripts/feeds install -p packages2 quickstart
-./scripts/feeds install -p packages2 luci-app-quickstart
+# quickstart / luci-app-quickstart 由下方 ./scripts/feeds install -a 解析
+# （现在唯一提供者是 kenzo feed；原 packages2 feed 已不存在于
+#  feeds.conf.default，显式 install -p packages2 只会报错并被跳过）
 rm -rf feeds/packages/net/{qBittorrent,qBittorrent-static,xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,trojan-plus,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls,haproxy}
 rm -rf package/feeds/lede/php7
 # rm -rf package/feeds/packages/php7
 rm -rf feeds/lede/mt-drivers
 rm -rf feeds/kenzok8/r8168
-rm -rf feeds/kiddin/MentoHUST-OpenWrt-ipk
 # rm -rf feeds/luci/applications/luci-app-dockerman
 # rm -rf feeds/other/luci-app-dockerman
-# rm -rf feeds/kiddin/luci-app-dockerman
 # rm -rf feeds/liuran/luci-app-dockerman
 # rm -rf package/lede/luci-app-dockerman
 rm -rf feeds/liuran/adguardhome
@@ -47,13 +46,6 @@ rm -rf feeds/liuran/GoQuiet
 rm -rf feeds/liuran/gost
 rm -rf feeds/kenzok8/3proxy/patches
 rm -rf feeds/kenzok8/shortcut-fe
-rm -rf feeds/NueXini/luci-app-gost
-rm -rf feeds/NueXini/gost
-rm -rf feeds/NueXini/qBittorrent
-rm -rf feeds/NueXini/qBittorrent-static
-rm -rf feeds/NueXini/qtbase
-rm -rf feeds/NueXini/qttools
-rm -rf feeds/NueXini/rblibtorrent
 
 # ============================================================
 # Remove duplicate mihomo packages from other feeds

@@ -31,19 +31,18 @@ rm -rf feeds/lede/qBittorrent-Enhanced-Edition
 rm -rf feeds/luci/transmission
 rm -rf feeds/luci/transmission-web-control
 rm -rf feeds/luci2/luci-app-turboacc
-./scripts/feeds install -p packages2 quickstart
-./scripts/feeds install -p packages2 luci-app-quickstart
+# quickstart / luci-app-quickstart 由下方 ./scripts/feeds install -a 解析
+# （现在唯一提供者是 kenzo feed；原 packages2 feed 已不存在于
+#  feeds.conf.default，显式 install -p packages2 只会报错并被跳过）
 ./scripts/feeds install -p luci2 transmission
 ./scripts/feeds install -p luci2 transmission-web-control
-rm -rf feeds/packages/net/{qBittorrent,qBittorrent-static,xray-core,v2ray-geodata,sing-box,chinadns-ng,nikki,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls,haproxy}
+rm -rf feeds/packages/net/{qBittorrent,qBittorrent-static,xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls,haproxy}
 rm -rf package/feeds/lede/php7
 # rm -rf package/feeds/packages/php7
 rm -rf feeds/lede/mt-drivers
 rm -rf feeds/kenzok8/r8168
-rm -rf feeds/kiddin/MentoHUST-OpenWrt-ipk
 # rm -rf feeds/luci/applications/luci-app-dockerman
 # rm -rf feeds/other/luci-app-dockerman
-# rm -rf feeds/kiddin/luci-app-dockerman
 # rm -rf feeds/liuran/luci-app-dockerman
 # rm -rf package/lede/luci-app-dockerman
 rm -rf feeds/liuran/adguardhome
@@ -51,19 +50,11 @@ rm -rf feeds/liuran/GoQuiet
 rm -rf feeds/liuran/gost
 rm -rf feeds/kenzok8/3proxy/patches
 rm -rf feeds/kenzok8/shortcut-fe
-rm -rf feeds/NueXini/luci-app-gost
-rm -rf feeds/NueXini/gost
-rm -rf feeds/NueXini/qBittorrent
-rm -rf feeds/NueXini/qBittorrent-static
 rm -rf feeds/xuanranran/other/lean/qBittorrent
 rm -rf feeds/xuanranran/other/lean/qBittorrent-static
 rm -rf feeds/xuanranran/other/lean/qtbase
 rm -rf feeds/xuanranran/other/lean/qttools
 rm -rf feeds/xuanranran/other/lean/rblibtorrent
-rm -rf feeds/NueXini/qtbase
-rm -rf feeds/NueXini/qttools
-rm -rf feeds/NueXini/rblibtorrent
-rm -rf feeds/nikki
 rm -rf feeds/kenzok8/mihomo
 rm -rf feeds/kenzok8/luci-app-mihomo
 rm -rf feeds/small/mihomo
@@ -71,13 +62,13 @@ rm -rf feeds/kenzo/mihomo
 rm -rf feeds/xuanranran/mihomo
 rm -rf feeds/haiibo/mihomo
 rm -rf feeds/liuran/mihomo
-# feeds/nikki completely removed; feeds/packages/net/nikki is the sole nikki provider
 # ============================================================
-# nikki sed 块已删除，不再需要：
-# feeds/small/nikki 上游已是纯 config wrapper（无 Go 编译、
-# 无 PROVIDES mihomo、DEPENDS 已含 +mihomo），与 lede 005 的目标一致。
-# 旧 sed 块实际只会重复添加 +mihomo 并加一个无引用的 symlink。
-# Immortalwrt 不需要 005 patch（仅 lede 的 feeds/packages/net/nikki 需要）。
+# nikki 说明（更正原注释）：
+# immortalwrt packages feed（pin 97af139）里没有 nikki，mihomo 也没有；
+# 唯一 nikki 提供者是 feeds/kenzok8 (jell)/nikki（feeds/kenzok8/
+# luci-app-nikki 已删，勿删 feeds/kenzok8/nikki 本体）。
+# nikki DEPENDS +mihomo，mihomo 由 helloworld feed 提供——
+# 006 patch 给 clashoo 加的 +nikki 依赖正是走这条链。
 # ============================================================
 # ============================================================
 # clashoo 修复已转为 quilt 树级 patch：

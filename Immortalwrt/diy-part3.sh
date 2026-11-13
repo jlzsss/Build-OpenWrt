@@ -36,7 +36,7 @@ rm -rf feeds/luci2/luci-app-turboacc
 #  feeds.conf.default，显式 install -p packages2 只会报错并被跳过）
 ./scripts/feeds install -p luci2 transmission
 ./scripts/feeds install -p luci2 transmission-web-control
-rm -rf feeds/packages/net/{qBittorrent,qBittorrent-static,xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls,haproxy}
+rm -rf feeds/packages/net/{qBittorrent,qBittorrent-static,xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocksr-libev,simple-obfs,tcping,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls,haproxy}
 rm -rf package/feeds/lede/php7
 # rm -rf package/feeds/packages/php7
 rm -rf feeds/lede/mt-drivers

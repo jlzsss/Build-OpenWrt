@@ -16,6 +16,25 @@ git clone --depth 1 https://github.com/jlzsss/luci-app-shadowsocksr.git package/
 git clone --depth 1 https://github.com/tty228/luci-app-serverchan.git package/luci-app-serverchan
 git clone --depth 1 https://github.com/peter-tank/openwrt-minisign.git package/minisign
 git clone --depth 1 https://github.com/aa65535/openwrt-chinadns.git package/chinadns
+# ============================================================
+# 修复 kenzok8(jell) feed 的 luci-app-ssrust 依赖断链——已转为
+# quilt 树级 patch：
+#   patches/009-ssrust-sslocal-ssserver-dependency.patch
+# 背景：包名 luci-app-shadowsocks-rust（上游 muink/luci-app-ssrust）
+#   LUCI_DEPENDS:=+luci-base +shadowsocks-rust-config
+# 但所有 feed 的 shadowsocks-rust 包都只提供
+#   sslocal/ssmanager/ssserver/ssurl/ssservice 子包，
+# 没有任何 feed 提供 shadowsocks-rust-config，导致
+# make package/install 阶段 opkg 报：
+#   pkg_hash_check_unresolved: cannot find dependency shadowsocks-rust-config
+#   Error 255
+# 该依赖只是上游单文件打包（build-ipk.sh）拆分配置的产物；
+# app 自带 init.d/默认 UCI 配置/规则脚本，真正的运行时依赖是
+# /usr/bin/sslocal 与 /usr/bin/ssserver（init.d 由 ss_local/ss_server
+# 生成 sslocal/ssserver 二进制名），因此替换为对应子包依赖。
+# 由 workflow 在本脚本之后统一 `patch -p1 --forward` 打上。
+# ============================================================
+
 rm -rf feeds/kenzok8/luci-app-qbittorrent
 rm -rf feeds/kenzok8/qbittorrent
 rm -rf feeds/kenzok8/qBittorrent

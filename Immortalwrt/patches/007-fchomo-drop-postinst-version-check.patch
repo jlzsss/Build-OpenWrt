@@ -12,21 +12,21 @@ upstream and were silent no-ops.)
 
 --- a/feeds/kenzok8/luci-app-fchomo/Makefile
 +++ b/feeds/kenzok8/luci-app-fchomo/Makefile
-@@ -48,7 +48,6 @@ else
+@@ -49,7 +49,6 @@ else
  	REVISION=$$(ubus call system board | jsonfilter -qe '@.release.revision' | cut -f1 -d'-' | sed 's|[a-z]||gi')
  fi
-
+ 
 -[ "$$REVISION" -ge 28158 -o "$$REVISION" -eq 0 ] || { 2>&1 echo "Minimum OpenWrt version required is 24.10."; exit 1; }
  # https://archive.openwrt.org/releases/**/version.buildinfo
- # r?????-??????????    25.??.?-rc1
- # r28158-d276b4c91a    24.10.0-rc1
+ # r?????-??????????    26.??.?-rc1
+ # r32353-9e9b05130c    25.12.0-rc1
 --- a/feeds/small/luci-app-fchomo/Makefile
 +++ b/feeds/small/luci-app-fchomo/Makefile
-@@ -48,7 +48,6 @@ else
+@@ -49,7 +49,6 @@ else
  	REVISION=$$(ubus call system board | jsonfilter -qe '@.release.revision' | cut -f1 -d'-' | sed 's|[a-z]||gi')
  fi
-
+ 
 -[ "$$REVISION" -ge 28158 -o "$$REVISION" -eq 0 ] || { 2>&1 echo "Minimum OpenWrt version required is 24.10."; exit 1; }
  # https://archive.openwrt.org/releases/**/version.buildinfo
- # r?????-??????????    25.??.?-rc1
- # r28158-d276b4c91a    24.10.0-rc1
+ # r?????-??????????    26.??.?-rc1
+ # r32353-9e9b05130c    25.12.0-rc1

@@ -20,7 +20,7 @@ GO_ARCH_DEPENDS/golang-package.mk cleanup.
 
 --- a/feeds/small/clashoo/Makefile
 +++ b/feeds/small/clashoo/Makefile
-@@ -36,8 +36,8 @@
+@@ -36,8 +36,8 @@ define Package/clashoo
    SECTION:=net
    CATEGORY:=Network
    TITLE:=Clashoo (Mihomo)
@@ -31,7 +31,7 @@ GO_ARCH_DEPENDS/golang-package.mk cleanup.
  endef
  
  define Package/clashoo/description
-@@ -49,13 +49,8 @@
+@@ -49,13 +49,8 @@ define Package/clashoo/conffiles
  endef
  
  define Package/clashoo/install
@@ -48,7 +48,7 @@ GO_ARCH_DEPENDS/golang-package.mk cleanup.
  	$(INSTALL_DIR) $(1)/etc/config
 --- a/feeds/kenzok8/clashoo/Makefile
 +++ b/feeds/kenzok8/clashoo/Makefile
-@@ -36,8 +36,8 @@
+@@ -36,8 +36,8 @@ define Package/clashoo
    SECTION:=net
    CATEGORY:=Network
    TITLE:=Clashoo (Mihomo)
@@ -59,7 +59,7 @@ GO_ARCH_DEPENDS/golang-package.mk cleanup.
  endef
  
  define Package/clashoo/description
-@@ -49,13 +49,8 @@
+@@ -49,13 +49,8 @@ define Package/clashoo/conffiles
  endef
  
  define Package/clashoo/install

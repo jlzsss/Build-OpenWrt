@@ -1,0 +1,22 @@
+--- a/tools/erofs-utils/Makefile
++++ b/tools/erofs-utils/Makefile
+@@ -10,9 +10,17 @@ PKG_NAME:=erofs-utils
+ PKG_VERSION:=1.8.10
+ PKG_RELEASE:=1
+ 
++# git.kernel.org throttles/blocks GitHub Actions egress IPs, which makes
++# the snapshot tarball download time out in CI. Use the GitHub mirror
++# instead. The tree at tag v1.8.10 (commit 51b5939b) is identical to the
++# kernel.org snapshot; OpenWrt repacks it deterministically, so the hash
++# below is the sha256 of the repacked tarball (see scripts/dl_github_archive.py
++# / DownloadMethod/rawgit in include/download.mk).
++PKG_SOURCE_PROTO:=git
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+-PKG_SOURCE_URL=https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/
+-PKG_HASH:=05eb4edebe11decce6ecb34e98d2f80c8cd283c2f2967d8ba7efd58418570514
++PKG_SOURCE_URL:=https://github.com/erofs/erofs-utils
++PKG_SOURCE_VERSION:=51b5939b5f783221310d25146e6a2019ba8129b6
++PKG_MIRROR_HASH:=bdde43b42f4dd9cbdac7a296ae0e52e4a05872cecf0f3a2c3f2656a7517a5b74
+ 
+ PKG_FIXUP:=autoreconf
+ 

@@ -1,0 +1,48 @@
+Subject: [PATCH] openlist2: fall back to the full frontend tarball
+
+The kenzok8/openwrt-packages openlist2 Makefile bumped
+PKG_WEB_VERSION to 4.2.10 but kept downloading
+openlist-frontend-dist-lite-v4.2.10.tar.gz. OpenList-Frontend only
+publishes the full dist tarball for that release, so every download
+mirror returns 404 and the build aborts with:
+
+  No more mirrors to try - giving up.
+
+The lite entry's HASH was 0019dfc4... (the SHA256 of an empty file),
+so even a successful download would have failed the hash check.
+
+This patch appends an override that only takes effect while the
+Makefile still references the lite asset. Upstream has since switched
+to the full asset; in that state the conditional is false and the
+patch is a no-op, so the hunk keeps applying across upstream fixes.
+The SHA256 is for v4.2.10; update it together with PKG_WEB_VERSION on
+future bumps.
+
+Applied to feeds/kenzo (openwrt-packages).
+
+--- a/feeds/kenzo/openlist2/Makefile
++++ b/feeds/kenzo/openlist2/Makefile
+@@ -90,5 +90,23 @@ define Package/openlist2/install
+ 	$(INSTALL_DATA) $(CURDIR)/files/data.db $(1)/etc/openlist2/data.db
+ endef
+ 
++# The -lite- frontend tarball is not published for every release
++# (e.g. v4.2.10). If the feed still points at it, fall back to the
++# full dist asset and its published SHA256.
++ifeq ($(shell grep -q '^  FILE:=openlist-frontend-dist-lite-v' $(CURDIR)/Makefile && echo yes),yes)
++  define Download/openlist-frontend
++  FILE:=openlist-frontend-dist-v$(PKG_WEB_VERSION).tar.gz
++  URL:=https://github.com/OpenListTeam/OpenList-Frontend/releases/download/v$(PKG_WEB_VERSION)/
++  HASH:=4e137046ef350ca847bff145824ed2ffe9948a05c39a6e269b80c69eb13fc636
++endef
++
++  define Build/Prepare
++	$(call Build/Prepare/Default)
++	$(TAR) --strip-components=1 -C $(PKG_BUILD_DIR)/public/dist -xzf $(DL_DIR)/openlist-frontend-dist-v$(PKG_WEB_VERSION).tar.gz
++	$(SED) 's_https://res.oplist.org/logo_/assets_g' $(PKG_BUILD_DIR)/public/dist/index.html
++	$(SED) 's_https://res.oplist.org/logo_/assets_g' $(PKG_BUILD_DIR)/public/dist/static/manifest.json
++endef
++endif
++
+ $(eval $(call Download,openlist-frontend))
+ $(eval $(call BuildPackage,openlist2))

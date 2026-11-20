@@ -12,10 +12,10 @@ what Package/changeguard/install consumes). Every mirror therefore returns
 404 and the build aborts with:
   No more mirrors to try - giving up.
 
-Pin PKG_VERSION to the latest real changeguard release (0.3.3). The
+Pin PKG_VERSION to the latest real changeguard release (0.3.4). The
 override is placed after include ./release.mk and before the first use
 of $(PKG_VERSION), so PKG_SOURCE, PKG_SOURCE_URL and PKG_BUILD_DIR all
-expand to 0.3.3. The feed's own PKG_VERSION line is left untouched, so
+expand to 0.3.4. The feed's own PKG_VERSION line is left untouched, so
 the hunk keeps applying across kaiplus-version bumps.
 
 Applied to feeds/kenzok8 (jell).
@@ -27,5 +27,5 @@ Applied to feeds/kenzok8 (jell).
 +# The feed derives the tag/asset from PKG_VERSION, but pins a kaiplus
 +# version that has no changeguard release. Use the latest real changeguard
 +# release instead; PKG_SOURCE/_URL below expand from this value.
-+PKG_VERSION:=0.3.3
++PKG_VERSION:=0.3.4
  PKG_SOURCE:=changeguard-$(PKG_VERSION)-$(ARCH).tar.gz

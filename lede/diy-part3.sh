@@ -121,3 +121,39 @@ for cgoff in $(grep -rl 'filter-out CGO_ENABLED=%' feeds --include=Makefile 2>/d
 done
 echo "=== Go cgo fix done ==="
 
+# ============================================================
+# 强制关闭 MMDVM 全家桶（保留 menuconfig 菜单，但不参与构建）
+# mmdvm 并不在 lede 源码里，而是来自 feeds.conf.default 中
+# kenzok8(jell) feed 的第三方包。入口是 luci-app-mmdvm /
+# mmdvm-luci，依赖链会连带选中：
+#   mmdvm-host -> ysf/p25/nxdn-clients、ircddb/dapnet-gateway
+# 共 10 个包，且 mmdvm-luci 的 Kconfig 里 LUCI_APP_MMDVM 等
+# 默认都是 y。这里在 .config 就位后逐项写回 "is not set"，
+# 保证菜单里仍能看到它们，但任何情况下都不会被选中/编译。
+# 原 patches/013-disable-mmdvm.patch 就是改 .config 的，因补丁
+# 上下文与当前配置不一致已删除，改由本段统一处理。
+# ============================================================
+echo "=== Force-disabling MMDVM packages in .config ==="
+for sym in \
+  PACKAGE_luci-app-mmdvm \
+  PACKAGE_luci-theme-bootstrap-mmdvm \
+  PACKAGE_mmdvm \
+  PACKAGE_mmdvm-host \
+  PACKAGE_mmdvm-luci \
+  PACKAGE_mmdvm-luci-i18n-zh-cn \
+  PACKAGE_mmdvm-cal \
+  PACKAGE_libmmdvm \
+  PACKAGE_dapnet-gateway \
+  PACKAGE_ircddb-gateway \
+  PACKAGE_ysf-clients \
+  PACKAGE_p25-clients \
+  PACKAGE_nxdn-clients \
+  LUCI_APP_MMDVM \
+  LUCI_THEME_BOOTSTRAP_MMDVM \
+  LUCI_LANG_zh-cn
+do
+  sed -i "s/^CONFIG_${sym}=.*/# CONFIG_${sym} is not set/" .config
+  grep -q "^# CONFIG_${sym} is not set$" .config || echo "# CONFIG_${sym} is not set" >> .config
+done
+echo "=== MMDVM disabled ==="
+

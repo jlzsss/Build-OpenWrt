@@ -128,11 +128,43 @@ echo "=== Go cgo fix done ==="
 # mmdvm-luci，依赖链会连带选中：
 #   mmdvm-host -> ysf/p25/nxdn-clients、ircddb/dapnet-gateway
 # 共 10 个包，且 mmdvm-luci 的 Kconfig 里 LUCI_APP_MMDVM 等
-# 默认都是 y。这里在 .config 就位后逐项写回 "is not set"，
-# 保证菜单里仍能看到它们，但任何情况下都不会被选中/编译。
-# 原 patches/013-disable-mmdvm.patch 就是改 .config 的，因补丁
-# 上下文与当前配置不一致已删除，改由本段统一处理。
+# 默认都是 y。
+#
+# 注意：只改 .config 不够。mmdvm-luci 的翻译子包是 HIDDEN 包：
+#   PACKAGE_mmdvm-luci-i18n-zh-cn
+#     DEFAULT:=LUCI_LANG_zh-cn||(ALL&&m)
+#     DEPENDS:=+$(PKG_NAME)   # "+" 会生成 select PACKAGE_mmdvm-luci
+# 而 package/lean/default-settings 又 select LUCI_LANG_zh-cn，
+# 于是 make defconfig 会重新算出：
+#   i18n=y -> select mmdvm-luci -> select mmdvm-host -> ...
+# 所以分两层处理：
+#   1) 去掉 default-settings 对旧 zh-cn 符号的 select（新版 LuCI
+#      的简体中文是 zh_Hans，不受影响）；
+#   2) 把 mmdvm-luci 翻译子包的依赖从 select 改成 depends on
+#      （与官方 luci.mk 的 DEPENDS:=$(PKG_NAME) 一致）。
+# 这样即使 LUCI_LANG_zh-cn 被其他包重新选上，也不会再把整个
+# MMDVM 拖进来。
 # ============================================================
+DEFAULT_SETTINGS_MK=package/lean/default-settings/Makefile
+if [ -f "$DEFAULT_SETTINGS_MK" ]; then
+  echo "=== Dropping legacy LUCI_LANG_zh-cn select from default-settings ==="
+  sed -i 's/ +@LUCI_LANG_zh-cn//' "$DEFAULT_SETTINGS_MK"
+  if grep -Fq '@LUCI_LANG_zh-cn' "$DEFAULT_SETTINGS_MK"; then
+    echo "  !! WARNING: legacy zh-cn select still present in $DEFAULT_SETTINGS_MK"
+  fi
+fi
+
+MMDVM_LUCI_MK=feeds/kenzok8/mmdvm-luci/Makefile
+if [ -f "$MMDVM_LUCI_MK" ]; then
+  echo "=== Fixing mmdvm-luci i18n dependency (select -> depends on) ==="
+  sed -i 's/^\([[:space:]]*\)DEPENDS:=+\$(PKG_NAME)[[:space:]]*$/\1DEPENDS:=$(PKG_NAME)/' "$MMDVM_LUCI_MK"
+  if grep -Fq 'DEPENDS:=$(PKG_NAME)' "$MMDVM_LUCI_MK"; then
+    echo "  -> mmdvm-luci i18n now depends on PACKAGE_mmdvm-luci"
+  else
+    echo "  !! WARNING: mmdvm-luci i18n dependency pattern not found"
+  fi
+fi
+
 echo "=== Force-disabling MMDVM packages in .config ==="
 for sym in \
   PACKAGE_luci-app-mmdvm \

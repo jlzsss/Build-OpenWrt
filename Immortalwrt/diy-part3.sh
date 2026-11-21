@@ -120,6 +120,50 @@ for cgoff in $(grep -rl 'filter-out CGO_ENABLED=%' feeds --include=Makefile 2>/d
 done
 echo "=== Go cgo fix done ==="
 
+# ============================================================
+# 强制关闭 MMDVM 全家桶（保留 menuconfig 菜单，但不参与构建）
+# mmdvm 来自 feeds.conf.default 中 kenzok8(jell) feed。
+# mmdvm-luci 的翻译子包 PACKAGE_mmdvm-luci-i18n-zh-cn 是 HIDDEN 包，
+# 且 DEPENDS:=+$(PKG_NAME) 会生成 select PACKAGE_mmdvm-luci；
+# 一旦 LUCI_LANG_zh-cn 被选中，make defconfig 就会把整条
+# MMDVM 依赖链重新拉起来。这里把翻译子包改成 depends on
+# （与官方 luci.mk 一致），并在 .config 中逐项关闭相关包。
+# ============================================================
+MMDVM_LUCI_MK=feeds/kenzok8/mmdvm-luci/Makefile
+if [ -f "$MMDVM_LUCI_MK" ]; then
+  echo "=== Fixing mmdvm-luci i18n dependency (select -> depends on) ==="
+  sed -i 's/^\([[:space:]]*\)DEPENDS:=+\$(PKG_NAME)[[:space:]]*$/\1DEPENDS:=$(PKG_NAME)/' "$MMDVM_LUCI_MK"
+  if grep -Fq 'DEPENDS:=$(PKG_NAME)' "$MMDVM_LUCI_MK"; then
+    echo "  -> mmdvm-luci i18n now depends on PACKAGE_mmdvm-luci"
+  else
+    echo "  !! WARNING: mmdvm-luci i18n dependency pattern not found"
+  fi
+fi
+
+echo "=== Force-disabling MMDVM packages in .config ==="
+for sym in \
+  PACKAGE_luci-app-mmdvm \
+  PACKAGE_luci-theme-bootstrap-mmdvm \
+  PACKAGE_mmdvm \
+  PACKAGE_mmdvm-host \
+  PACKAGE_mmdvm-luci \
+  PACKAGE_mmdvm-luci-i18n-zh-cn \
+  PACKAGE_mmdvm-cal \
+  PACKAGE_libmmdvm \
+  PACKAGE_dapnet-gateway \
+  PACKAGE_ircddb-gateway \
+  PACKAGE_ysf-clients \
+  PACKAGE_p25-clients \
+  PACKAGE_nxdn-clients \
+  LUCI_APP_MMDVM \
+  LUCI_THEME_BOOTSTRAP_MMDVM \
+  LUCI_LANG_zh-cn
+do
+  sed -i "s/^CONFIG_${sym}=.*/# CONFIG_${sym} is not set/" .config
+  grep -q "^# CONFIG_${sym} is not set$" .config || echo "# CONFIG_${sym} is not set" >> .config
+done
+echo "=== MMDVM disabled ==="
+
 # ./scripts/feeds update -a
 # ./scripts/feeds install -p kenzok8 luci-app-transmission
 # ./scripts/feeds install -p kenzok8 transmission

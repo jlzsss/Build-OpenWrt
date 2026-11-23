@@ -18,15 +18,19 @@ The Go toolchain build itself stays intact (the binary is compiled but
 not shipped); dropping the whole Go build would additionally require
 GO_ARCH_DEPENDS/golang-package.mk cleanup.
 
---- a/feeds/small/clashoo/Makefile
-+++ b/feeds/small/clashoo/Makefile
+Regenerated with quilt against clashoo 2026.11.12, whose DEPENDS now
+carries an extra +curl token; that is the only context change versus
+the previous revision of this patch.
+
+--- a/feeds/kenzok8/clashoo/Makefile
++++ b/feeds/kenzok8/clashoo/Makefile
 @@ -36,8 +36,8 @@ define Package/clashoo
    SECTION:=net
    CATEGORY:=Network
    TITLE:=Clashoo (Mihomo)
--  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip
+-  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +curl +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip
 -  PROVIDES:=mihomo clash-meta
-+  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip +nikki
++  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +curl +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip +nikki
 +  PROVIDES:=clash-meta
  endef
  
@@ -46,15 +50,15 @@ GO_ARCH_DEPENDS/golang-package.mk cleanup.
  
  	$(INSTALL_DIR) $(1)/etc/init.d
  	$(INSTALL_DIR) $(1)/etc/config
---- a/feeds/kenzok8/clashoo/Makefile
-+++ b/feeds/kenzok8/clashoo/Makefile
+--- a/feeds/small/clashoo/Makefile
++++ b/feeds/small/clashoo/Makefile
 @@ -36,8 +36,8 @@ define Package/clashoo
    SECTION:=net
    CATEGORY:=Network
    TITLE:=Clashoo (Mihomo)
--  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip
+-  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +curl +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip
 -  PROVIDES:=mihomo clash-meta
-+  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip +nikki
++  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +curl +yq +firewall4 +ip-full +coreutils-nohup +coreutils-timeout +kmod-inet-diag +kmod-nft-socket +kmod-nft-tproxy +kmod-tun +kmod-dummy +unzip +nikki
 +  PROVIDES:=clash-meta
  endef
  

@@ -12,20 +12,24 @@ which is exactly what Package/linkspace/install consumes). Every mirror
 therefore returns 404 and the build aborts with:
   No more mirrors to try - giving up.
 
-Pin PKG_VERSION to the latest real linkspace release (0.3.2). The
+Pin PKG_VERSION to the latest real linkspace release (0.3.3). The
 override is placed after include ./release.mk and before the first use
 of $(PKG_VERSION), so PKG_SOURCE, PKG_SOURCE_URL and PKG_BUILD_DIR all
-expand to 0.3.2. The feed's own PKG_VERSION line is left untouched, so
+expand to 0.3.3. The feed's own PKG_VERSION line is left untouched, so
 the hunk keeps applying across kaiplus-version bumps.
 
 Applied to feeds/kenzok8 (jell).
 
 --- a/feeds/kenzok8/linkspace/Makefile
 +++ b/feeds/kenzok8/linkspace/Makefile
-@@ -5,2 +5,6 @@ PKG_RELEASE:=1
+@@ -3,6 +3,10 @@ PKG_NAME:=linkspace
+ PKG_VERSION:=kaiplus-runtime-v1.0.18
+ PKG_RELEASE:=1
  include ./release.mk
 +# The feed derives the tag/asset from PKG_VERSION, but pins a kaiplus
 +# version that has no linkspace release. Use the latest real linkspace
 +# release instead; PKG_SOURCE/_URL below expand from this value.
-+PKG_VERSION:=0.3.2
++PKG_VERSION:=0.3.3
  PKG_SOURCE:=linkspace-$(PKG_VERSION)-$(ARCH).tar.gz
+ PKG_SOURCE_URL:=https://github.com/istoreos/istoreos-app-hub/releases/download/linkspace-runtime-v$(PKG_VERSION)/
+ PKG_HASH:=skip
